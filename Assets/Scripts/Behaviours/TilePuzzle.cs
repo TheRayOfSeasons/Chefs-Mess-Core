@@ -15,24 +15,30 @@ public class TilePuzzle : MonoBehaviour
     [SerializeField] private Vector2 center = new Vector2(0, 0);
     [SerializeField] private Sprite tileSprite;
 
+    private string tileNamePrefix = "Tile";
     private int currentEmptyIndex;
     private List<Vector2> snappingPoints;
     private List<GameObject> tiles;
+    private Plane draggingPlane;
+    private Vector3 offset;
+    private Camera mainCamera;
+    private GameObject selectedTile;
 
     private GameObject CreateTile(int tileId)
     {
         GameObject tile = new GameObject();
-        tile.name = $"Tile-{tileId}";
+        tile.name = $"{this.tileNamePrefix}-{tileId}";
         SpriteRenderer renderer = tile.AddComponent<SpriteRenderer>();
         renderer.sprite = this.tileSprite;
         Tile tileScript = tile.AddComponent<Tile>();
-        tileScript.index = tileId;
+        tileScript.correctIndex = tileId;
+        tileScript.currentIndex = tileId;
         BoxCollider2D collider = tile.AddComponent<BoxCollider2D>();
         collider.isTrigger = true;
         return tile;
     }
 
-    void InitializeTiles()
+    private void InitializeTiles()
     {
         float absoluteXCount = Math.Abs(xCount);
         float floatedXCount = (float)absoluteXCount;
@@ -50,7 +56,6 @@ public class TilePuzzle : MonoBehaviour
             float y = i + this.center.y;
             for(float j = unpaddedMinX; j <= unpaddedMaxX; j += xPadding)
             {
-
                 float x = j + this.center.x;
                 Vector2 position = new Vector2(x, y);
                 GameObject tile = this.CreateTile(tileId);
@@ -66,6 +71,82 @@ public class TilePuzzle : MonoBehaviour
         }
     }
 
+    private void ShuffleTiles()
+    {
+        List<int> indices = new List<int>();
+        List<int> shuffledIndices = new List<int>();
+
+        for(int i = 0; i < this.tiles.Count; i++)
+        {
+            int index = this.tiles[i].GetComponent<Tile>().correctIndex;
+            indices.Add(index);
+            shuffledIndices.Add(index);
+        }
+
+        for(int i = 0; i < indices.Count; i++)
+        {
+            int originalIndex = indices[i];
+            int shuffledIndex = originalIndex;
+            do
+            {
+                shuffledIndex = UnityEngine.Random.Range(0, indices.Count - 1);
+            }
+            while(shuffledIndex == originalIndex);
+            int tempIndex = shuffledIndices[originalIndex];
+            shuffledIndices[originalIndex] = shuffledIndices[shuffledIndex];
+            shuffledIndices[shuffledIndex] = tempIndex;
+        }
+
+        for(int i = 0; i < this.tiles.Count; i++)
+        {
+            if(this.tiles[i].activeSelf)
+            {
+                int newIndex = shuffledIndices[i];
+                GameObject tile = this.tiles[i];
+                tile.GetComponent<Tile>().currentIndex = newIndex;
+                tile.transform.position = this.snappingPoints[newIndex];
+            }
+        }
+    }
+
+    private void StartTileDrag(GameObject tile)
+    {
+        this.draggingPlane = new Plane(this.mainCamera.transform.forward, tile.transform.position);
+        Ray camRay = this.mainCamera.ScreenPointToRay(Input.mousePosition);
+        float planeDistance;
+        this.draggingPlane.Raycast(camRay, out planeDistance);
+        this.offset = tile.transform.position - camRay.GetPoint(planeDistance);
+    }
+
+    private void UpdateTileDrag(GameObject tile)
+    {
+        Ray camRay = this.mainCamera.ScreenPointToRay(Input.mousePosition);
+        float planeDistance;
+        this.draggingPlane.Raycast(camRay, out planeDistance);
+        tile.transform.position = camRay.GetPoint(planeDistance) + offset;
+    }
+
+    private void EndTileDrag(GameObject tile)
+    {
+        this.selectedTile = null;
+    }
+
+    private void HandlePuzzleInputs(GameObject tile)
+    {
+        if(Input.GetKeyDown(KeyMaps.TILE_SELECTOR))
+        {
+            StartTileDrag(tile);
+        }
+        if(Input.GetKey(KeyMaps.TILE_SELECTOR))
+        {
+            UpdateTileDrag(tile);
+        }
+        if(Input.GetKeyUp(KeyMaps.TILE_SELECTOR))
+        {
+            EndTileDrag(tile);
+        }
+    }
+
     void Start()
     {
         this.currentEmptyIndex = this.inactiveIndex;
@@ -73,17 +154,23 @@ public class TilePuzzle : MonoBehaviour
         this.tiles = new List<GameObject>();
 
         this.InitializeTiles();
+        this.ShuffleTiles();
+        this.mainCamera = Camera.main;
     }
 
     void Update()
     {
         ObjectSelector2D.CheckForObjectDetection(hit => {
-            string objectName = hit.collider.gameObject.name;
-            if(objectName.Contains("Tile"))
+            GameObject tile = hit.collider.gameObject;
+            if(tile.name.Contains(this.tileNamePrefix))
             {
-                Tile tileScript = hit.collider.gameObject.GetComponent<Tile>();
-                tileScript.selected = true;
+                this.selectedTile = tile;
             }
         }, 50f);
+
+        if(this.selectedTile)
+        {
+            HandlePuzzleInputs(this.selectedTile);
+        }
     }
 }
