@@ -170,7 +170,6 @@ public class TilePuzzle : MonoBehaviour
 
         List<float> xPositions = new List<float>() { tile.transform.position.x };
         List<float> yPositions = new List<float>() { tile.transform.position.y };
-        int snapsDetected = 0;
         foreach(RaycastHit2D[] hits in hitGroups)
         {
             foreach(RaycastHit2D hit in hits)
@@ -194,7 +193,6 @@ public class TilePuzzle : MonoBehaviour
                 xPositions.Add(position.x);
                 yPositions.Add(position.y);
                 this.currentConnections.Add(snapComponent.snapIndex, position);
-                snapsDetected++;
                 break;
             }
         }
