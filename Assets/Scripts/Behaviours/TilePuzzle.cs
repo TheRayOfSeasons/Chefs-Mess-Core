@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using SelectionUtils;
 
+// TODO: If we have extra time, refactor the code of this module to be more DRY.
+
 public class TilePuzzle : MonoBehaviour
 {
     [SerializeField] private int inactiveIndex = 3;
@@ -19,15 +21,14 @@ public class TilePuzzle : MonoBehaviour
     private string tileNamePrefix = "Tile";
     private string snapperNamePrefix = "SnapDetector";
     private int currentEmptyIndex;
-    private List<Vector2> snappingPoints;
-    private List<GameObject> snappingDetectors;
-    private List<GameObject> tiles;
+    private List<Vector2> snappingPoints = new List<Vector2>();
+    private List<GameObject> snappingDetectors = new List<GameObject>();
+    private List<GameObject> tiles = new List<GameObject>();
     private Plane draggingPlane;
     private Vector3 offset;
     private Camera mainCamera;
     private GameObject selectedTile;
     private Dictionary<int, Vector2> currentConnections = new Dictionary<int, Vector2>();
-    private int calls = 0;
 
     private GameObject CreateTile(int tileId)
     {
@@ -75,16 +76,20 @@ public class TilePuzzle : MonoBehaviour
                 Vector2 position = new Vector2(x, y);
                 GameObject snapDetector = this.CreateSnappingDetector(tileId);
                 GameObject tile = this.CreateTile(tileId);
+                SnappingDetector snapComponent = snapDetector.GetComponent<SnappingDetector>();
                 snapDetector.transform.position = new Vector3(
                     position.x,
                     position.y,
                     1f
                 );
                 tile.transform.position = position;
+                snapComponent.occupied = true;
                 if(tileId == this.inactiveIndex)
                 {
+                    snapComponent.occupied = false;
                     tile.SetActive(false);
                 }
+                this.snappingDetectors.Add(snapDetector);
                 this.snappingPoints.Add(position);
                 this.tiles.Add(tile);
                 tileId++;
@@ -120,12 +125,18 @@ public class TilePuzzle : MonoBehaviour
 
         for(int i = 0; i < this.tiles.Count; i++)
         {
+            int newIndex = shuffledIndices[i];
+            GameObject snapDetector = this.snappingDetectors[newIndex];
+            SnappingDetector snapComponent = snapDetector.GetComponent<SnappingDetector>();
+            snapComponent.occupied = false;
             if(this.tiles[i].activeSelf)
             {
-                int newIndex = shuffledIndices[i];
+                snapComponent.occupied = true;
+
                 GameObject tile = this.tiles[i];
                 Tile tileComponent = tile.GetComponent<Tile>();
                 Vector2 position = this.snappingPoints[newIndex];
+
                 tileComponent.currentIndex = newIndex;
                 tileComponent.autoTarget = position;
                 tile.transform.position = position;
@@ -147,12 +158,11 @@ public class TilePuzzle : MonoBehaviour
 
     private void UpdateTileDrag(GameObject tile)
     {
-        float rayDistance = 1000f;
         RaycastHit2D[][] hitGroups = new RaycastHit2D[][] {
-            Physics2D.RaycastAll(tile.transform.position, Vector2.left, rayDistance),
-            Physics2D.RaycastAll(tile.transform.position, Vector2.up, rayDistance),
-            Physics2D.RaycastAll(tile.transform.position, Vector2.right, rayDistance),
-            Physics2D.RaycastAll(tile.transform.position, Vector2.down, rayDistance)
+            Physics2D.RaycastAll(tile.transform.position, Vector2.left, this.xPadding + 0.5f),
+            Physics2D.RaycastAll(tile.transform.position, Vector2.up, this.yPadding + 0.5f),
+            Physics2D.RaycastAll(tile.transform.position, Vector2.right, this.xPadding + 0.5f),
+            Physics2D.RaycastAll(tile.transform.position, Vector2.down, this.yPadding + 0.5f)
         };
 
         // reset current connections
@@ -160,30 +170,32 @@ public class TilePuzzle : MonoBehaviour
 
         List<float> xPositions = new List<float>() { tile.transform.position.x };
         List<float> yPositions = new List<float>() { tile.transform.position.y };
+        int snapsDetected = 0;
         foreach(RaycastHit2D[] hits in hitGroups)
         {
             foreach(RaycastHit2D hit in hits)
             {
-                if(hit)
-                {
-                    if(hit.collider.gameObject.name.Contains(this.snapperNamePrefix))
-                    {
-                        // TODO: catch potential undefined errors
-                        Tile tileComponent = tile.GetComponent<Tile>();
-                        SnappingDetector snapComponent = hit.collider.gameObject.GetComponent<SnappingDetector>();
-                        if(snapComponent.snapIndex != tileComponent.currentIndex)
-                        {
-                            if(!this.currentConnections.ContainsKey(snapComponent.snapIndex))
-                            {
-                                Vector2 position = hit.collider.transform.position;
-                                xPositions.Add(position.x);
-                                yPositions.Add(position.y);
-                                this.currentConnections.Add(snapComponent.snapIndex, position);
-                                break;
-                            }
-                        }
-                    }
-                }
+                if(!hit)
+                    continue;
+
+                if(!hit.collider.gameObject.name.Contains(this.snapperNamePrefix))
+                    continue;
+
+                Tile tileComponent = tile.GetComponent<Tile>();
+                SnappingDetector snapComponent = hit.collider.gameObject.GetComponent<SnappingDetector>();
+
+                if(!(snapComponent.snapIndex != tileComponent.currentIndex && !snapComponent.occupied))
+                    continue;
+
+                if(this.currentConnections.ContainsKey(snapComponent.snapIndex))
+                    continue;
+
+                Vector2 position = hit.collider.transform.position;
+                xPositions.Add(position.x);
+                yPositions.Add(position.y);
+                this.currentConnections.Add(snapComponent.snapIndex, position);
+                snapsDetected++;
+                break;
             }
         }
 
@@ -204,7 +216,6 @@ public class TilePuzzle : MonoBehaviour
             rawPosition.z
         );
         tile.transform.position = modifiedPostion;
-        this.calls++;
     }
 
     private void EndTileDrag(GameObject tile)
@@ -224,6 +235,18 @@ public class TilePuzzle : MonoBehaviour
                 isFirstIteration = false;
             }
         }
+
+        GameObject previousSnapDetector = this.snappingDetectors[tileComponent.currentIndex];
+        GameObject nextSnapDetector = this.snappingDetectors[currentIndex];
+        SnappingDetector previousSnapComponent = previousSnapDetector.GetComponent<SnappingDetector>();
+        SnappingDetector nextSnapComponent = nextSnapDetector.GetComponent<SnappingDetector>();
+
+        if(previousSnapComponent.occupied && nextSnapComponent.occupied)
+            return;
+
+        previousSnapComponent.occupied = false;
+        nextSnapComponent.occupied = true;
+
         tileComponent.currentIndex = currentIndex;
         tileComponent.autoTarget = this.snappingPoints[currentIndex];
         tileComponent.selected = false;
@@ -248,8 +271,6 @@ public class TilePuzzle : MonoBehaviour
     void Start()
     {
         this.currentEmptyIndex = this.inactiveIndex;
-        this.snappingPoints = new List<Vector2>();
-        this.tiles = new List<GameObject>();
 
         this.InitializeTiles();
         this.ShuffleTiles();
