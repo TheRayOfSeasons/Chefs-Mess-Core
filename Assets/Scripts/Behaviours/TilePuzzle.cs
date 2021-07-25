@@ -104,6 +104,8 @@ public class TilePuzzle : MonoBehaviour
                 Vector2 position = new Vector2(x, y);
                 GameObject snapDetector = this.CreateSnappingDetector(tileId);
                 GameObject tile = this.CreateTile(tileId, xOffset, yOffset);
+                snapDetector.transform.SetParent(this.transform);
+                tile.transform.SetParent(this.transform);
                 Tile tileComponent = tile.GetComponent<Tile>();
                 SnappingDetector snapComponent = snapDetector.GetComponent<SnappingDetector>();
                 snapDetector.transform.position = new Vector3(
