@@ -149,26 +149,4 @@ namespace QuestManagement
             return true;
         }
     }
-
-    // public class QuestLine : CompletionTracker
-    // {
-    //     public List<Quest> quests { get; protected set; }
-        
-    //     public QuestLine(List<Quest> quests, CompletionEvent onComplete)
-    //     {
-    //         this.isCompleted = false;
-    //         this.quests = quests;
-    //         this.onComplete = onComplete;
-    //     }
-
-    //     protected override bool CheckCompletion()
-    //     {
-    //         foreach(Quest quest in this.quests)
-    //         {
-    //             if(!quest.isCompleted)
-    //                 return false;
-    //         }
-    //         return true;
-    //     }
-    // }
 }
