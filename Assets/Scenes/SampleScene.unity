@@ -456,8 +456,8 @@ MonoBehaviour:
   inactiveIndex: 2
   xCount: 3
   yCount: 3
-  xPadding: 2
-  yPadding: 1.75
+  xPadding: 1.75
+  yPadding: 1.55
   tileSize: 0.8
   isDone: 0
   center: {x: 0, y: 0}
