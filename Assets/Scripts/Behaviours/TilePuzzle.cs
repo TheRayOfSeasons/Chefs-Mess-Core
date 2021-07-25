@@ -16,7 +16,29 @@ public class TilePuzzle : MonoBehaviour
     [SerializeField] private float yPadding = 2f;
     [SerializeField] private float tileSize = 10f;
     [SerializeField] private Vector2 center = new Vector2(0, 0);
-    [SerializeField] private Sprite tileSprite;
+
+    /**
+     * Make sure that the sprites applied to this field follow this order:
+     *
+     * Example 3x3:
+     * ----------------------------------------------------
+     * | Sprite Index 6 | Sprite Index 7 | Sprite Index 8 |
+     * ----------------------------------------------------
+     * | Sprite Index 3 | Sprite Index 4 | Sprite Index 5 |
+     * ----------------------------------------------------
+     * | Sprite Index 0 | Sprite Index 1 | Sprite Index 2 |
+     * ----------------------------------------------------
+     *
+     * Example 3x4:
+     * -------------------------------------------------------------------------
+     * | Sprite Index 8  | Sprite Index 9  | Sprite Index 10 | Sprite Index 11 |
+     * -------------------------------------------------------------------------
+     * | Sprite Index 4  | Sprite Index 5  | Sprite Index 6  | Sprite Index 7  |
+     * -------------------------------------------------------------------------
+     * | Sprite Index 0  | Sprite Index 1  | Sprite Index 2  | Sprite Index 3  |
+     * -------------------------------------------------------------------------
+     */
+    [SerializeField] private Sprite[] tileSprite;
 
     private string tileNamePrefix = "Tile";
     private string snapperNamePrefix = "SnapDetector";
@@ -30,12 +52,14 @@ public class TilePuzzle : MonoBehaviour
     private GameObject selectedTile;
     private Dictionary<int, Vector2> currentConnections = new Dictionary<int, Vector2>();
 
-    private GameObject CreateTile(int tileId)
+    private GameObject CreateTile(int tileId, int xOffset, int yOffset)
     {
         GameObject tile = new GameObject();
+        tile.transform.localScale = new Vector3(this.tileSize, this.tileSize, this.tileSize);
         tile.name = $"{this.tileNamePrefix}-{tileId}";
         SpriteRenderer renderer = tile.AddComponent<SpriteRenderer>();
-        renderer.sprite = this.tileSprite;
+
+        renderer.sprite = this.tileSprite[tileId];
         Tile tileScript = tile.AddComponent<Tile>();
         tileScript.correctIndex = tileId;
         tileScript.currentIndex = tileId;
@@ -67,15 +91,17 @@ public class TilePuzzle : MonoBehaviour
         float unpaddedMinY = -unpaddedMaxY;
 
         int tileId = 0;
-        for(float i = unpaddedMinY; i <= unpaddedMaxY; i += yPadding)
+        int yOffset = 0;
+        for(float i = unpaddedMinY; i <= unpaddedMaxY; i += yPadding, yOffset++)
         {
             float y = i + this.center.y;
-            for(float j = unpaddedMinX; j <= unpaddedMaxX; j += xPadding)
+            int xOffset = 0;
+            for(float j = unpaddedMinX ; j <= unpaddedMaxX; j += xPadding, xOffset++)
             {
                 float x = j + this.center.x;
                 Vector2 position = new Vector2(x, y);
                 GameObject snapDetector = this.CreateSnappingDetector(tileId);
-                GameObject tile = this.CreateTile(tileId);
+                GameObject tile = this.CreateTile(tileId, xOffset, yOffset);
                 SnappingDetector snapComponent = snapDetector.GetComponent<SnappingDetector>();
                 snapDetector.transform.position = new Vector3(
                     position.x,
@@ -158,11 +184,13 @@ public class TilePuzzle : MonoBehaviour
 
     private void UpdateTileDrag(GameObject tile)
     {
+        float xRayDistance = this.xPadding;
+        float yRayDistance = this.yPadding;
         RaycastHit2D[][] hitGroups = new RaycastHit2D[][] {
-            Physics2D.RaycastAll(tile.transform.position, Vector2.left, this.xPadding + 0.5f),
-            Physics2D.RaycastAll(tile.transform.position, Vector2.up, this.yPadding + 0.5f),
-            Physics2D.RaycastAll(tile.transform.position, Vector2.right, this.xPadding + 0.5f),
-            Physics2D.RaycastAll(tile.transform.position, Vector2.down, this.yPadding + 0.5f)
+            Physics2D.RaycastAll(tile.transform.position, Vector2.left, xRayDistance),
+            Physics2D.RaycastAll(tile.transform.position, Vector2.up, yRayDistance),
+            Physics2D.RaycastAll(tile.transform.position, Vector2.right, xRayDistance),
+            Physics2D.RaycastAll(tile.transform.position, Vector2.down, yRayDistance)
         };
 
         // reset current connections
