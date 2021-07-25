@@ -15,6 +15,7 @@ public class TilePuzzle : MonoBehaviour
     [SerializeField] private float xPadding = 2f;
     [SerializeField] private float yPadding = 2f;
     [SerializeField] private float tileSize = 10f;
+    [SerializeField] private bool isDone = false;
     [SerializeField] private Vector2 center = new Vector2(0, 0);
 
     /**
@@ -46,6 +47,7 @@ public class TilePuzzle : MonoBehaviour
     private List<Vector2> snappingPoints = new List<Vector2>();
     private List<GameObject> snappingDetectors = new List<GameObject>();
     private List<GameObject> tiles = new List<GameObject>();
+    private List<GameObject> hiddenTiles = new List<GameObject>();
     private Plane draggingPlane;
     private Vector3 offset;
     private Camera mainCamera;
@@ -102,17 +104,20 @@ public class TilePuzzle : MonoBehaviour
                 Vector2 position = new Vector2(x, y);
                 GameObject snapDetector = this.CreateSnappingDetector(tileId);
                 GameObject tile = this.CreateTile(tileId, xOffset, yOffset);
+                Tile tileComponent = tile.GetComponent<Tile>();
                 SnappingDetector snapComponent = snapDetector.GetComponent<SnappingDetector>();
                 snapDetector.transform.position = new Vector3(
                     position.x,
                     position.y,
                     1f
                 );
+                tileComponent.autoTarget = position;
                 tile.transform.position = position;
                 snapComponent.occupied = true;
                 if(tileId == this.inactiveIndex)
                 {
                     snapComponent.occupied = false;
+                    this.hiddenTiles.Add(tile);
                     tile.SetActive(false);
                 }
                 this.snappingDetectors.Add(snapDetector);
@@ -276,6 +281,10 @@ public class TilePuzzle : MonoBehaviour
         tileComponent.currentIndex = currentIndex;
         tileComponent.autoTarget = this.snappingPoints[currentIndex];
         tileComponent.selected = false;
+
+        this.isDone = this.CheckWin();
+        if(this.isDone)
+            this.HandleWin();
     }
 
     private void HandlePuzzleInputs(GameObject tile)
@@ -294,6 +303,25 @@ public class TilePuzzle : MonoBehaviour
         }
     }
 
+    private void HandleWin()
+    {
+        foreach(GameObject tile in this.hiddenTiles)
+        {
+            tile.SetActive(true);
+        }
+    }
+
+    private bool CheckWin()
+    {
+        foreach(GameObject tile in this.tiles)
+        {
+            Tile tileComponennt = tile.GetComponent<Tile>();
+            if(!tileComponennt.isPlacedCorrectly)
+                return false;
+        }
+        return true;
+    }
+
     void Start()
     {
         this.currentEmptyIndex = this.inactiveIndex;
@@ -305,6 +333,9 @@ public class TilePuzzle : MonoBehaviour
 
     void Update()
     {
+        if(this.isDone)
+            return;
+
         ObjectSelector2D.CheckForObjectDetection(hit => {
             GameObject tile = hit.collider.gameObject;
             if(tile.name.Contains(this.tileNamePrefix))
