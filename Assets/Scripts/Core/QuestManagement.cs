@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace QuestManagement
 {
-    public delegate bool ObjectiveCriteria();
     public delegate void CompletionEvent();
 
     public class CompletionTracker
@@ -61,22 +60,19 @@ namespace QuestManagement
     /// </summary>
     public class Objective : TaskEntity
     {
-        public ObjectiveCriteria checkCriteria { get; protected set; }
 
         public Objective(
                 string name,
                 string description,
-                ObjectiveCriteria checkCriteria,
                 CompletionEvent onComplete
             ) : base(name, description)
         {
-            this.checkCriteria = checkCriteria;
             this.onComplete = onComplete;
         }
 
         protected override bool CheckCompletion()
         {
-            return this.checkCriteria();
+            return this.isCompleted;
         }
     }
 
@@ -88,9 +84,8 @@ namespace QuestManagement
         public MainObjective(
                 string name,
                 string description,
-                ObjectiveCriteria checkCriteria,
                 CompletionEvent onComplete
-            ): base(name, description, checkCriteria, onComplete)
+            ): base(name, description, onComplete)
         {
         }
     }
@@ -103,9 +98,8 @@ namespace QuestManagement
         public OptionalObjective(
                 string name,
                 string description,
-                ObjectiveCriteria checkCriteria,
                 CompletionEvent onComplete
-            ): base(name, description, checkCriteria, onComplete)
+            ): base(name, description, onComplete)
         {
         }
     }
@@ -113,14 +107,14 @@ namespace QuestManagement
     public class Quest : TaskEntity
     {
         public bool isAccessible { get; protected set; }
-        public List<MainObjective> mainObjectives { get; protected set; }
-        public List<OptionalObjective> optionalObjectives { get; protected set; }
+        public Dictionary<string, MainObjective> mainObjectives { get; protected set; }
+        public Dictionary<string, OptionalObjective> optionalObjectives { get; protected set; }
 
         public Quest(
                 string name,
                 string description,
-                List<MainObjective> mainObjectives,
-                List<OptionalObjective> optionalObjectives,
+                Dictionary<string, MainObjective> mainObjectives,
+                Dictionary<string, OptionalObjective> optionalObjectives,
                 CompletionEvent onComplete
             ) : base(name, description)
         {
@@ -147,34 +141,34 @@ namespace QuestManagement
 
         protected override bool CheckCompletion()
         {
-            foreach(MainObjective mainObjective in this.mainObjectives)
+            foreach(KeyValuePair<string, MainObjective> mainObjective in this.mainObjectives)
             {
-                if(!mainObjective.isCompleted)
+                if(!mainObjective.Value.isCompleted)
                     return false;
             }
             return true;
         }
     }
 
-    public class QuestLine : CompletionTracker
-    {
-        public List<Quest> quests { get; protected set; }
+    // public class QuestLine : CompletionTracker
+    // {
+    //     public List<Quest> quests { get; protected set; }
         
-        public QuestLine(List<Quest> quests, CompletionEvent onComplete)
-        {
-            this.isCompleted = false;
-            this.quests = quests;
-            this.onComplete = onComplete;
-        }
+    //     public QuestLine(List<Quest> quests, CompletionEvent onComplete)
+    //     {
+    //         this.isCompleted = false;
+    //         this.quests = quests;
+    //         this.onComplete = onComplete;
+    //     }
 
-        protected override bool CheckCompletion()
-        {
-            foreach(Quest quest in this.quests)
-            {
-                if(!quest.isCompleted)
-                    return false;
-            }
-            return true;
-        }
-    }
+    //     protected override bool CheckCompletion()
+    //     {
+    //         foreach(Quest quest in this.quests)
+    //         {
+    //             if(!quest.isCompleted)
+    //                 return false;
+    //         }
+    //         return true;
+    //     }
+    // }
 }

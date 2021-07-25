@@ -309,6 +309,7 @@ public class TilePuzzle : MonoBehaviour
         {
             tile.SetActive(true);
         }
+        GameManager.Instance.questDefinitions.ClearMainObjective("puzzle", "solve-the-puzzle");
     }
 
     private bool CheckWin()
