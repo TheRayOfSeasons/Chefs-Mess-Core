@@ -7,34 +7,9 @@ public class QuestDefinitions
 {
     public Dictionary<string, Quest> activeQuests = new Dictionary<string, Quest>();
 
-    public QuestDefinitions()
+    public Quest GetQuest(string questKey)
     {
-        Quest puzzleQuest = this.GetPuzzleQuest();
-        this.activeQuests.Add("puzzle", puzzleQuest);
-    }
-
-    private Quest GetPuzzleQuest()
-    {
-        return new Quest(
-            name: "Puzzle Quest",
-            description: "Solve a puzzle",
-            mainObjectives: new Dictionary<string, MainObjective>() {
-                {
-                    "solve-the-puzzle",
-                    new MainObjective(
-                        name: "Solve the puzzle.",
-                        description: "Solve the 3x3 puzzle",
-                        onComplete: () => {
-                            Debug.Log("Puzzle objective completed!");
-                        }
-                    )
-                }
-            },
-            optionalObjectives: new Dictionary<string, OptionalObjective>(),
-            onComplete: () => {
-                Debug.Log("Puzzle Quest completed!");
-            }
-        );
+        return this.activeQuests[questKey];
     }
 
     private bool ValidateQuestCall(string questkey)

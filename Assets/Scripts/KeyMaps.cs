@@ -10,6 +10,7 @@ public static class KeyMaps
     public static readonly KeyCode[] LEFT_MOVE_KEYS = { KeyCode.A, KeyCode.LeftArrow };
     public static readonly KeyCode[] DOWN_MOVE_KEYS = { KeyCode.S, KeyCode.DownArrow };
     public static readonly KeyCode[] RIGHT_MOVE_KEYS = { KeyCode.D, KeyCode.RightArrow };
+    public static readonly KeyCode INTERACT = KeyCode.E;
 
     public static bool IsAnyKeyPressed(KeyCode[] validKeys)
     {

@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Constants : MonoBehaviour
+public class Constants
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum MonoTag
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        PLAYER,
+        INTERACTABLE,
+        TILE,
+        SNAPPING_DETECTOR
     }
 }
