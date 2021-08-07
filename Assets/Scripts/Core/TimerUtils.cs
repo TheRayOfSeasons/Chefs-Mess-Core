@@ -75,6 +75,11 @@ namespace TimerUtils
             this.action();
         }
 
+        public void SetNewMaxTime(float maxTime)
+        {
+            this.maxTime = maxTime;
+        }
+
         public void Reset()
         {
             this.currentTime = maxTime;
