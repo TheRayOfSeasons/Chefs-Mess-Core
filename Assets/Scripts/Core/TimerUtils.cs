@@ -34,9 +34,14 @@ namespace TimerUtils
         /// </summary>
         private bool triggerOnInitial;
 
-        /// <summary>
-        /// The constructor for the timed action.
-        /// </summary>
+        public TimedAction(float maxTime, TimerAction action)
+        {
+            this.maxTime = maxTime;
+            this.currentTime = maxTime;
+            this.action = action;
+            this.triggerOnInitial = false;
+        }
+
         public TimedAction(float maxTime, TimerAction action, bool triggerOnInitial = true)
         {
             this.maxTime = maxTime;
@@ -54,13 +59,25 @@ namespace TimerUtils
         public void Run(float time)
         {
             currentTime -= time;
-            if(currentTime > 0 && !triggerOnInitial)
+            if(this.currentTime > 0 && !this.triggerOnInitial)
                 return;
+            this.action();
+            if(this.triggerOnInitial)
+                this.triggerOnInitial = false;
+            this.currentTime = maxTime;
+        }
 
-            action();
-            if(triggerOnInitial)
-                triggerOnInitial = false;
-            currentTime = maxTime;
+        public void RunOnce(float time)
+        {
+            this.currentTime -= time;
+            if(this.currentTime > 0 && !triggerOnInitial)
+                return;
+            this.action();
+        }
+
+        public void Reset()
+        {
+            this.currentTime = maxTime;
         }
     }
 }
