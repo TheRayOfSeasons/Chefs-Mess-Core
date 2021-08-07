@@ -37,4 +37,19 @@ public class Runner : MonoBehaviour
             this.Jump();
         }
     }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if(!JumperGame.Instance.IsOngoing)
+            return;
+
+        if(collider.GetComponent<MonoTagAssigner>())
+        {
+            MonoTagAssigner tag = collider.GetComponent<MonoTagAssigner>();
+            if(tag.monoTag == Constants.MonoTag.JUMPER_GAME_OBSTACLE)
+            {
+                JumperGame.Instance.HandleLose();
+            }
+        }
+    }
 }

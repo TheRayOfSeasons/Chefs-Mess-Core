@@ -95,14 +95,14 @@ public class JumperGame : MonoBehaviour
     public void HandleLose()
     {
         this.isOngoing = false;
-        Time.timeScale = 1.0f;
+        Time.timeScale = 0f;
         Debug.Log("Lose");
     }
 
     public void HandleWin()
     {
         this.isOngoing = false;
-        Time.timeScale = 1.0f;
+        Time.timeScale = 0f;
         Debug.Log("Win");
     }
 
