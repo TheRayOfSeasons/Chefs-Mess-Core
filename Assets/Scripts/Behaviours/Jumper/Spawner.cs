@@ -5,7 +5,7 @@ using TimerUtils;
 
 public class Spawner : MonoBehaviour
 {
-    public float interval = 2f;
+    public float interval = 5f;
     [SerializeField] public Vector3 offsetPosition;
     [SerializeField] private GameObject prefab;
 

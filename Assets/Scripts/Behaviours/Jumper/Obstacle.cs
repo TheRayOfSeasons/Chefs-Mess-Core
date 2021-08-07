@@ -6,14 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(MonoTagAssigner))]
 public class Obstacle : MonoBehaviour
 {
+    private Vector3 direction = Vector3.left;
+    private float speed = 3f;
+
     void Awake()
     {
         this.GetComponent<MonoTagAssigner>().monoTag = Constants.MonoTag.JUMPER_GAME_OBSTACLE;
-    }
-
-    void Start()
-    {
-
     }
 
     void Update()
@@ -21,7 +19,7 @@ public class Obstacle : MonoBehaviour
         if(!JumperGame.Instance.IsOngoing)
             return;
 
-        // float speed = JumperGame.Instance.GetCurrentSpeed() * 0.1f;
-        this.transform.position = Vector2.Lerp(this.transform.position, new Vector2(-9, this.transform.position.y), 0.1f);
+        Vector3 newPosition = this.direction * this.speed * Time.deltaTime;
+        this.transform.Translate(newPosition);
     }
 }

@@ -52,6 +52,7 @@ public class JumperGame : MonoBehaviour
             maxTime: this.speedIncrementInterval,
             action: () => {
                 this.currentSpeed += this.GetSpeedIncrement();
+                Debug.Log(this.currentSpeed);
             }
         );
     }
@@ -94,12 +95,14 @@ public class JumperGame : MonoBehaviour
     public void HandleLose()
     {
         this.isOngoing = false;
+        Time.timeScale = 1.0f;
         Debug.Log("Lose");
     }
 
     public void HandleWin()
     {
         this.isOngoing = false;
+        Time.timeScale = 1.0f;
         Debug.Log("Win");
     }
 
@@ -149,6 +152,6 @@ public class JumperGame : MonoBehaviour
             this.winTimerHandler.RunOnce(Time.deltaTime);
         }
 
-        Time.timeScale = this.GetCurrentSpeed() + 1f;
+        Time.timeScale = this.currentSpeed + 1f;
     }
 }
