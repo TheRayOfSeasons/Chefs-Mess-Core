@@ -49,7 +49,7 @@ public class PuzzleQuestProvider : QuestProvider
             title: quest.name,
             description: quest.description,
             startEvent: () => {
-                UIManager.Instance.questModal.Toggle(false);
+                GameManager.Instance.ToggleHubMode(false);
                 this.tilePuzzle.SetActive(!this.tilePuzzle.activeSelf);
             }
         );

@@ -15,12 +15,29 @@ public class GameManager : MonoBehaviour
     }
 
     public List<InteractabilityReceptor> interactionSubscriptions = new List<InteractabilityReceptor>();
-    public int interactionsDone = 0;
+    public GameObject hub;
+    private int interactionsDone = 0;
+    private bool isHubMode = true;
+    public bool IsHubMode { get { return this.isHubMode; } }
 
     void Awake()
     {
         instance = this;
         this.questDefinitions = new QuestDefinitions();
+    }
+
+    public bool ToggleHubMode()
+    {
+        this.isHubMode = !this.isHubMode;
+        this.hub.SetActive(this.isHubMode);
+        return this.isHubMode;
+    }
+
+    public bool ToggleHubMode(bool toggle)
+    {
+        this.isHubMode = toggle;
+        this.hub.SetActive(this.isHubMode);
+        return this.isHubMode;
     }
 
     public QuestDefinitions questDefinitions { get; protected set; }

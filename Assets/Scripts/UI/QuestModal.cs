@@ -42,7 +42,10 @@ public class QuestModal : MonoBehaviour
     public void SetStartEvent(UnityAction startEvent)
     {
         this.startButtonComponent.onClick.RemoveAllListeners();
-        this.startButtonComponent.onClick.AddListener(startEvent);
+        this.startButtonComponent.onClick.AddListener(() => {
+            this.Toggle(false);
+            startEvent();
+        });
     }
 
     public void Toggle(bool toggle)
