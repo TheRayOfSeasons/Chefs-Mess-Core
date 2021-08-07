@@ -9,6 +9,16 @@ public class Constants
         PLAYER,
         INTERACTABLE,
         TILE,
-        SNAPPING_DETECTOR
+        SNAPPING_DETECTOR,
+        JUMPER_GAME_RUNNER,
+        JUMPER_GAME_OBSTACLE,
+        JUMPER_GAME_OBSTACLE_RECYCLER
+    }
+
+    public enum Difficulty
+    {
+        EASY,
+        MEDIUM,
+        HARD
     }
 }
