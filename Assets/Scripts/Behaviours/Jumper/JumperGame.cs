@@ -112,7 +112,7 @@ public class JumperGame : MonoBehaviour
     {
         this.isOngoing = false;
         Time.timeScale = 0f;
-        Debug.Log("Win");
+        GameManager.Instance.questDefinitions.ClearMainObjective("jumper", "arrive-at-finish-line");
     }
 
     void Start()
@@ -121,9 +121,6 @@ public class JumperGame : MonoBehaviour
         this.SetCountDown();
         this.SetWinTimer();
         this.Reset();
-
-        // remove later
-        this.TriggerGameStart();
     }
 
     public void Reset()
