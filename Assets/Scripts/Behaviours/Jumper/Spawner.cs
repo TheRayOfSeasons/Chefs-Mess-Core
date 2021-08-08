@@ -21,11 +21,11 @@ public class Spawner : MonoBehaviour
                     this.transform.position.y + this.offsetPosition.y,
                     this.transform.position.z + this.offsetPosition.z
                 );
-                Instantiate(this.prefab, position, Quaternion.identity);
+                GameObject child = Instantiate(this.prefab, position, Quaternion.identity);
+                child.transform.SetParent(this.transform);
             }
         );
     }
-
 
     void Update()
     {

@@ -28,6 +28,7 @@ public class JumperGame : MonoBehaviour
     private TimedAction countdownHandler;
     private bool startCountdown = false;
     private TimedAction winTimerHandler;
+    private string spawnerParentName = "Spawners";
 
     void Awake()
     {
@@ -90,6 +91,14 @@ public class JumperGame : MonoBehaviour
 
     public void ClearObstacles()
     {
+        Transform spawnerParent = this.transform.Find(this.spawnerParentName);
+        foreach(Transform child in spawnerParent)
+        {
+            foreach(Transform grandChild in child)
+            {
+                Destroy(grandChild.gameObject);
+            }
+        }
     }
 
     public void HandleLose()
@@ -123,6 +132,7 @@ public class JumperGame : MonoBehaviour
         this.speedIncrementHandler.Reset();
         this.countdownHandler.Reset();
         this.winTimerHandler.Reset();
+        this.ClearObstacles();
         this.isOngoing = false;
         Time.timeScale = 1.0f;
     }
