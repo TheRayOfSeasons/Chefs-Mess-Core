@@ -494,6 +494,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Runner
       objectReference: {fileID: 0}
+    - target: {fileID: 6721293359102993246, guid: a9c4f4e937cb03346a539a5ebd9bbf1b,
+        type: 3}
+      propertyPath: jumpSpeed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6721293359102993246, guid: a9c4f4e937cb03346a539a5ebd9bbf1b,
+        type: 3}
+      propertyPath: raycasterPosition.y
+      value: -1.9
+      objectReference: {fileID: 0}
     - target: {fileID: 6721293359102993247, guid: a9c4f4e937cb03346a539a5ebd9bbf1b,
         type: 3}
       propertyPath: m_LocalPosition.x

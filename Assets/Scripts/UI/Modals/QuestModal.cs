@@ -3,24 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UIComponents;
 
-
-[RequireComponent(typeof(RectTransform))]
-public class QuestModal : MonoBehaviour
+public class QuestModal : Modal
 {
-    public GameObject body;
     public Text titleComponent;
     public Text descriptionComponent;
     public Button startButtonComponent;
-    public Button exitButtonComponent;
-
-    void Start()
-    {
-        this.Toggle(false);
-        this.exitButtonComponent.onClick.AddListener(() => {
-            this.Toggle(false);
-        });
-    }
 
     public void SetContents(string title, string description, UnityAction startEvent)
     {
@@ -43,13 +32,8 @@ public class QuestModal : MonoBehaviour
     {
         this.startButtonComponent.onClick.RemoveAllListeners();
         this.startButtonComponent.onClick.AddListener(() => {
-            this.Toggle(false);
+            this.ToggleToNonHub(false);
             startEvent();
         });
-    }
-
-    public void Toggle(bool toggle)
-    {
-        this.body.SetActive(toggle);
     }
 }

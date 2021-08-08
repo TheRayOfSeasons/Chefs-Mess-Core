@@ -105,7 +105,7 @@ public class JumperGame : MonoBehaviour
     {
         this.isOngoing = false;
         Time.timeScale = 0f;
-        Debug.Log("Lose");
+        GameManager.Instance.questDefinitions.FailMainObjective("jumper", "arrive-at-finish-line");
     }
 
     public void HandleWin()
@@ -123,6 +123,12 @@ public class JumperGame : MonoBehaviour
         this.Reset();
     }
 
+    public void Cleanup()
+    {
+        this.isOngoing = false;
+        Time.timeScale = 1.0f;
+    }
+
     public void Reset()
     {
         this.currentSpeed = this.GetSpeedIncrement();
@@ -130,8 +136,7 @@ public class JumperGame : MonoBehaviour
         this.countdownHandler.Reset();
         this.winTimerHandler.Reset();
         this.ClearObstacles();
-        this.isOngoing = false;
-        Time.timeScale = 1.0f;
+        this.Cleanup();
     }
 
     void Update()

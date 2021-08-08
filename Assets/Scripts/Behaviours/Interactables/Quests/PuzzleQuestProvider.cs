@@ -29,9 +29,11 @@ public class PuzzleQuestProvider : QuestProvider
                             description: "Solve the 3x3 puzzle",
                             onComplete: () => {
                                 Debug.Log("Puzzle objective completed!");
+                                UIManager.Instance.taskCompleteModal.ToggleToNonHub(true);
                             },
                             onFail: () => {
                                 Debug.Log("Puzzle objective Failed!");
+                                UIManager.Instance.taskFailedModal.ToggleToNonHub(true);
                             }
                         )
                     }

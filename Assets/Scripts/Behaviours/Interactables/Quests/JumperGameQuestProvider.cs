@@ -28,10 +28,27 @@ public class JumperGameQuestProvider : QuestProvider
                             name: "Survive for 60 seconds.",
                             description: "Press space to jump. Avoid all obstacles for 60 seconds.",
                             onComplete: () => {
-                                Debug.Log("Jumper game completed!");
+                                UIManager.Instance.taskCompleteModal.SetContents(
+                                    description: "Hooray! You got to the finish line!",
+                                    exitEvent: () => {
+                                        this.jumperGame.SetActive(false);
+                                    }
+                                );
+                                UIManager.Instance.taskCompleteModal.ToggleToNonHub(true);
                             },
                             onFail: () => {
-                                Debug.Log("Jumper game failed!");
+                                UIManager.Instance.taskFailedModal.SetContents(
+                                    description: "Oops! You bumped into something.",
+                                    retryEvent: () => {
+                                        JumperGame.Instance.Reset();
+                                        JumperGame.Instance.TriggerGameStart();
+                                    },
+                                    exitEvent: () => {
+                                        JumperGame.Instance.Cleanup();
+                                        this.jumperGame.SetActive(false);
+                                    }
+                                );
+                                UIManager.Instance.taskFailedModal.ToggleToNonHub(true);
                             }
                         )
                     }
@@ -53,7 +70,7 @@ public class JumperGameQuestProvider : QuestProvider
             description: quest.description,
             startEvent: () => {
                 GameManager.Instance.ToggleHubMode(false);
-                this.jumperGame.SetActive(!this.jumperGame.activeSelf);
+                this.jumperGame.SetActive(true);
                 JumperGame.Instance.TriggerGameStart();
             }
         );

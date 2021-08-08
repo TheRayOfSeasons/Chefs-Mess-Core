@@ -10,7 +10,10 @@ public class UIManager : MonoBehaviour
         get { return instance; }
     }
 
+    [Header("Quests")]
     public QuestModal questModal;
+    public TaskCompleteModal taskCompleteModal;
+    public TaskFailedModal taskFailedModal;
 
     void Awake()
     {

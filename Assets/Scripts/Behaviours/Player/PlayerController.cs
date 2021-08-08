@@ -46,7 +46,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(!isControllable && !GameManager.Instance.IsHubMode)
+        Debug.Log($"is controllable: {this.isControllable} | ishubmode: {GameManager.Instance.IsHubMode}");
+        if(!this.isControllable && !GameManager.Instance.IsHubMode)
         {
             this.rb.velocity = new Vector2(0, 0);
             return;
