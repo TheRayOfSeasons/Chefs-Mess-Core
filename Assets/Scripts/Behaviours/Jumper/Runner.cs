@@ -6,9 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(MonoTagAssigner))]
 public class Runner : MonoBehaviour
 {
-    public float jumpSpeed = 400f;
+    public float jumpSpeed = 50f;
+    [SerializeField] private Vector2 raycasterPosition = new Vector2(-9f, -1.9f);
+    private Vector2 raycasterDirection = Vector2.right;
+    private float raycasterDistance = 50f;
     private Rigidbody2D rb;
     private bool isJumpPressed = false;
+    private bool canJump = false;
 
     void Awake()
     {
@@ -18,6 +22,12 @@ public class Runner : MonoBehaviour
     void Start()
     {
         this.rb = this.GetComponent<Rigidbody2D>();
+        Debug.DrawRay(
+            this.raycasterPosition,
+            this.raycasterDirection,
+            Color.yellow,
+            this.raycasterDistance
+        );
     }
 
     void Jump()
@@ -31,8 +41,24 @@ public class Runner : MonoBehaviour
         if(!JumperGame.Instance.IsOngoing)
             return;
 
-        this.isJumpPressed = Input.GetKeyDown(KeyMaps.JUMPER_HOP);
-        if(this.isJumpPressed)
+        RaycastHit2D[] hits = Physics2D.RaycastAll(
+            this.raycasterPosition,
+            this.raycasterDirection,
+            this.raycasterDistance
+        );
+        foreach(RaycastHit2D hit in hits)
+        {
+            if(hit.collider.gameObject == this.gameObject)
+            {
+                this.canJump = true;
+                break;
+            }
+            this.canJump = false;
+        }
+        Debug.Log(this.canJump);
+
+        this.isJumpPressed = Input.GetKey(KeyMaps.JUMPER_HOP);
+        if(this.isJumpPressed && this.canJump)
         {
             this.Jump();
         }
