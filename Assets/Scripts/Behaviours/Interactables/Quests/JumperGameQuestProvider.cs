@@ -29,6 +29,9 @@ public class JumperGameQuestProvider : QuestProvider
                             description: "Press space to jump. Avoid all obstacles for 60 seconds.",
                             onComplete: () => {
                                 Debug.Log("Jumper game completed!");
+                            },
+                            onFail: () => {
+                                Debug.Log("Jumper game failed!");
                             }
                         )
                     }

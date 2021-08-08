@@ -29,6 +29,9 @@ public class PuzzleQuestProvider : QuestProvider
                             description: "Solve the 3x3 puzzle",
                             onComplete: () => {
                                 Debug.Log("Puzzle objective completed!");
+                            },
+                            onFail: () => {
+                                Debug.Log("Puzzle objective Failed!");
                             }
                         )
                     }
@@ -49,7 +52,6 @@ public class PuzzleQuestProvider : QuestProvider
             title: quest.name,
             description: quest.description,
             startEvent: () => {
-                GameManager.Instance.ToggleHubMode(false);
                 this.tilePuzzle.SetActive(!this.tilePuzzle.activeSelf);
             }
         );

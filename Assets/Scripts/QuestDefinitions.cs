@@ -64,6 +64,26 @@ public class QuestDefinitions
         this.CheckCompletions();
     }
 
+    public void FailMainObjective(string questKey, string objectiveKey)
+    {
+        if(!ValidateQuestCall(questKey))
+            return;
+        Quest quest = this.activeQuests[questKey];
+        if(!ValidateMainObjectiveCall(quest, objectiveKey))
+            return;
+        this.activeQuests[questKey].mainObjectives[objectiveKey].onFail();
+    }
+
+    public void FailOptionalObjective(string questKey, string objectiveKey)
+    {
+        if(!ValidateQuestCall(questKey))
+            return;
+        Quest quest = this.activeQuests[questKey];
+        if(!ValidateOptionalObjectiveCall(quest, objectiveKey))
+            return;
+        quest.optionalObjectives[objectiveKey].onFail();
+    }
+
     public void CheckCompletions()
     {
         foreach(KeyValuePair<string, Quest> questObject in activeQuests)

@@ -5,6 +5,7 @@ using UnityEngine;
 namespace QuestManagement
 {
     public delegate void CompletionEvent();
+    public delegate void FailureEvent();
 
     public class CompletionTracker
     {
@@ -60,14 +61,17 @@ namespace QuestManagement
     /// </summary>
     public class Objective : TaskEntity
     {
+        public FailureEvent onFail { get; protected set; }
 
         public Objective(
                 string name,
                 string description,
-                CompletionEvent onComplete
+                CompletionEvent onComplete,
+                FailureEvent onFail
             ) : base(name, description)
         {
             this.onComplete = onComplete;
+            this.onFail = onFail;
         }
 
         protected override bool CheckCompletion()
@@ -84,8 +88,9 @@ namespace QuestManagement
         public MainObjective(
                 string name,
                 string description,
-                CompletionEvent onComplete
-            ): base(name, description, onComplete)
+                CompletionEvent onComplete,
+                FailureEvent onFail
+            ): base(name, description, onComplete, onFail)
         {
         }
     }
@@ -98,8 +103,9 @@ namespace QuestManagement
         public OptionalObjective(
                 string name,
                 string description,
-                CompletionEvent onComplete
-            ): base(name, description, onComplete)
+                CompletionEvent onComplete,
+                FailureEvent onFail
+            ): base(name, description, onComplete, onFail)
         {
         }
     }
