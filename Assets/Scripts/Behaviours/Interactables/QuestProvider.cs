@@ -1,4 +1,5 @@
 ﻿using System;
+using QuestManagement;
 
 public class QuestProvider : Interactable
 {

@@ -59,21 +59,31 @@ public class JumperGameQuestProvider : QuestProvider
                 }
             )
         );
+        GameManager.Instance.questDefinitions.ClearMainObjective("jumper", "arrive-at-finish-line");
     }
 
     public override void RunQuestIntro()
     {
         base.RunQuestIntro();
         Quest quest = GameManager.Instance.questDefinitions.GetQuest(questKey: questKey);
-        UIManager.Instance.questModal.SetContents(
-            title: quest.name,
-            description: quest.description,
-            startEvent: () => {
-                GameManager.Instance.ToggleHubMode(false);
-                this.jumperGame.SetActive(true);
-                JumperGame.Instance.TriggerGameStart();
-            }
-        );
-        UIManager.Instance.questModal.Toggle(true);
+
+        if(quest.isCompleted)
+        {
+            UIManager.Instance.questDoneModal.SetTitle(quest.name);
+            UIManager.Instance.questDoneModal.Toggle(true);
+        }
+        else
+        {
+            UIManager.Instance.questModal.SetContents(
+                title: quest.name,
+                description: quest.description,
+                startEvent: () => {
+                    GameManager.Instance.ToggleHubMode(false);
+                    this.jumperGame.SetActive(true);
+                    JumperGame.Instance.TriggerGameStart();
+                }
+            );
+            UIManager.Instance.questModal.Toggle(true);
+        }
     }
 }

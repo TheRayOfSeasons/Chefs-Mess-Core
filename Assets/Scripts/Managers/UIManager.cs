@@ -11,8 +11,13 @@ public class UIManager : MonoBehaviour
     }
 
     [Header("Quests")]
+    // for quest prompts
     public QuestModal questModal;
+    // for quest prompts that were already completed
+    public QuestDoneModal questDoneModal;
+    // for after completing a quest
     public TaskCompleteModal taskCompleteModal;
+    // for after failing a quest
     public TaskFailedModal taskFailedModal;
 
     void Awake()
