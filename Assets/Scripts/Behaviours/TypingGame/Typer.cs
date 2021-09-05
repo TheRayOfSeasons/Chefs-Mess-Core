@@ -63,6 +63,7 @@ public class Typer : MonoBehaviour
         this.currentKey = this.GetCurrentCharacterKeyCode();
         this.countdownHandler.Reset();
         this.timer.maxTime = this.currentWord.maxTimerCount;
+        this.gui.SetupTimerSlider(this.currentWord.maxTimerCount);
         this.timer.Reset();
         this.Cleanup();
     }
@@ -173,6 +174,7 @@ public class Typer : MonoBehaviour
         if(this.timer != null)
         {
             this.timer.RunOnce(Time.deltaTime);
+            this.gui.UpdateTimerSlider(this.timer.currentTime);
         }
 
         if(Input.GetKeyDown(this.currentKey))

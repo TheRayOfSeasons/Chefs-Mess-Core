@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class TyperGUI : MonoBehaviour
 {
     [SerializeField] private GameObject letterObjectPrefab;
+    [SerializeField] private Slider timerSlider;
     [SerializeField] private Vector3 wordCenter = new Vector3();
     [SerializeField] private float letterSpacing = 1f;
     private Dictionary<int, TyperLetter> letterComponents = new Dictionary<int, TyperLetter>();
@@ -16,6 +17,8 @@ public class TyperGUI : MonoBehaviour
     {
         if(!this.letterObjectPrefab.GetComponent<TyperLetter>())
             throw new MissingComponentException("letterObjectPrefab must have TyperLetter");
+
+        this.timerSlider.interactable = false;
     }
 
     private List<Vector3> GetLetterPositions(int count)
@@ -63,6 +66,17 @@ public class TyperGUI : MonoBehaviour
         }
         this.letterComponents.Clear();
         this.letterObjects.Clear();
+    }
+
+    public void SetupTimerSlider(float maxTime)
+    {
+        this.timerSlider.maxValue = maxTime;
+        this.timerSlider.value = maxTime;
+    }
+
+    public void UpdateTimerSlider(float time)
+    {
+        this.timerSlider.value = time;
     }
 
     public void Traverse(char letter, int index)
