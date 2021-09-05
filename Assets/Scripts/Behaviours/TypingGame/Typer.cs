@@ -15,10 +15,12 @@ public class Typer : MonoBehaviour
 
     private KeyCode currentKey;
     private bool isWon = false;
+    private bool startCountdown = false;
+    private bool roundPause = false;
     private TimedAction countdownHandler;
     private TimedAction timer;
+    private TimedAction roundPauseTimer;
     [SerializeField] public float countDownBeforeStart = 3f;
-    private bool startCountdown = false;
 
     private void SetCountDown()
     {
@@ -43,6 +45,20 @@ public class Typer : MonoBehaviour
         );
     }
 
+    private void SetRoundPause()
+    {
+        this.roundPauseTimer = new TimedAction(
+            maxTime: 0.5f, // time before player can input word again after a round
+            action: () => {
+                this.gui.ToggleCelebratoryText(false);
+                this.roundPause = false;
+                this.roundPauseTimer.Reset();
+                this.RenderWord();
+            },
+            triggerOnInitial: false
+        );
+    }
+
     protected TyperWord GetCurrentWord()
     {
         Constants.Difficulty difficulty = GameManager.Instance.GetCurrentDifficulty();
@@ -57,6 +73,7 @@ public class Typer : MonoBehaviour
     public void Reset()
     {
         this.isWon = false;
+        this.roundPause = false;
         this.currentCharacterIndex = 0;
         this.currentRound = 1;
         this.currentWord = this.GetCurrentWord();
@@ -91,16 +108,6 @@ public class Typer : MonoBehaviour
         return key;
     }
 
-    void Start()
-    {
-        this.SetCountDown();
-        this.SetTimer();
-        this.Reset();
-
-        // temporary
-        this.TriggerGameStart();
-    }
-
     void HandleWin()
     {
         this.isWon = true;
@@ -119,6 +126,22 @@ public class Typer : MonoBehaviour
         this.gui.RenderWord(this.currentWord.word);
     }
 
+    void HandleBeforeWordRerender()
+    {
+        this.gui.ToggleCelebratoryText(true);
+        this.roundPauseTimer.Reset();
+        this.roundPause = true;
+    }
+
+    void HandleRoundChange()
+    {
+        this.currentRound++;
+        if(this.currentRound > this.currentWord.rounds)
+        {
+            this.HandleWin();
+        }
+    }
+
     void OnCharacterPress()
     {
         char previousCharacter = this.GetCurrentCharacter();
@@ -135,21 +158,28 @@ public class Typer : MonoBehaviour
         this.AfterCharacterPress(previousCharacter, previousIndex);
         if(previousIndex == lastIndex)
         {
-            this.RenderWord();
+            this.HandleBeforeWordRerender();
         }
         if((previousIndex + 1) > lastIndex)
         {
-            this.currentRound++;
-            if(this.currentRound > this.currentWord.rounds)
-            {
-                this.HandleWin();
-            }
+            this.HandleRoundChange();
         }
     }
 
     void AfterCharacterPress(char character, int characterIndex)
     {
         this.gui.Traverse(character, characterIndex);
+    }
+
+    void Start()
+    {
+        this.SetCountDown();
+        this.SetTimer();
+        this.SetRoundPause();
+        this.Reset();
+
+        // temporary
+        this.TriggerGameStart();
     }
 
     void Update()
@@ -175,6 +205,13 @@ public class Typer : MonoBehaviour
         {
             this.timer.RunOnce(Time.deltaTime);
             this.gui.UpdateTimerSlider(this.timer.currentTime);
+        }
+
+        if(this.roundPause)
+        {
+            if(this.roundPauseTimer != null)
+                this.roundPauseTimer.RunOnce(Time.deltaTime);
+            return;
         }
 
         if(Input.GetKeyDown(this.currentKey))

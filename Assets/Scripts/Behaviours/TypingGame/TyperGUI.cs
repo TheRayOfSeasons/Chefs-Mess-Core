@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class TyperGUI : MonoBehaviour
 {
     [SerializeField] private GameObject letterObjectPrefab;
+    [SerializeField] private GameObject celebratoryTextComponent;
     [SerializeField] private Slider timerSlider;
     [SerializeField] private Vector3 wordCenter = new Vector3();
     [SerializeField] private float letterSpacing = 1f;
@@ -18,6 +19,7 @@ public class TyperGUI : MonoBehaviour
         if(!this.letterObjectPrefab.GetComponent<TyperLetter>())
             throw new MissingComponentException("letterObjectPrefab must have TyperLetter");
 
+        this.celebratoryTextComponent.SetActive(false);
         this.timerSlider.interactable = false;
     }
 
@@ -77,6 +79,11 @@ public class TyperGUI : MonoBehaviour
     public void UpdateTimerSlider(float time)
     {
         this.timerSlider.value = time;
+    }
+
+    public void ToggleCelebratoryText(bool toggle)
+    {
+        this.celebratoryTextComponent.SetActive(toggle);
     }
 
     public void Traverse(char letter, int index)
