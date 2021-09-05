@@ -21,4 +21,6 @@ public class TyperMeta
         {Constants.Difficulty.MEDIUM, new TyperWord("tomatoes", 3)},
         {Constants.Difficulty.HARD, new TyperWord("carrots", 4)}
     };
+    public static Color traversedColor = new Color(0.0f, 0.9f, 0.1f, 1.0f);
+    public static Color untraversedColor = new Color(1.0f, 0.1f, 0.0f, 1.0f);
 }

@@ -5,6 +5,7 @@ using TimerUtils;
 
 public class Typer : MonoBehaviour
 {
+    [SerializeField] private TyperGUI gui;
     protected TyperWord currentWord;
     protected int currentCharacterIndex = 0;
     protected int currentRound = 1;
@@ -60,6 +61,7 @@ public class Typer : MonoBehaviour
     public void StartGame()
     {
         this.isOngoing = true;
+        this.RenderWord();
     }
 
     public char GetCurrentCharacter()
@@ -89,9 +91,15 @@ public class Typer : MonoBehaviour
         Debug.Log("Typer has been won");
     }
 
+    void RenderWord()
+    {
+        this.gui.RenderWord(this.currentWord.word);
+    }
+
     void OnCharacterPress()
     {
         char previousCharacter = this.GetCurrentCharacter();
+        int previousIndex = this.currentCharacterIndex;
 
         int lastIndex = this.currentWord.word.Length - 1;
         int oldIndex = this.currentCharacterIndex;
@@ -101,21 +109,24 @@ public class Typer : MonoBehaviour
         this.currentCharacterIndex = newIndex;
         this.currentKey = this.GetCurrentCharacterKeyCode();
 
-        this.AfterCharacterPress(previousCharacter);
-        if(newIndex == lastIndex)
+        this.AfterCharacterPress(previousCharacter, previousIndex);
+        if(previousIndex == lastIndex)
+        {
+            this.RenderWord();
+        }
+        if((previousIndex + 1) > lastIndex)
         {
             this.currentRound++;
-            if(this.currentRound == this.currentWord.rounds)
+            if(this.currentRound > this.currentWord.rounds)
             {
                 this.HandleWin();
             }
         }
     }
 
-    void AfterCharacterPress(char character)
+    void AfterCharacterPress(char character, int characterIndex)
     {
-        // add here your custom logic for applying extra effects
-        // or animation after pressing the right key
+        this.gui.Traverse(character, characterIndex);
     }
 
     void Update()

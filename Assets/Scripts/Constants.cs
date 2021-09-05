@@ -12,7 +12,8 @@ public class Constants
         SNAPPING_DETECTOR,
         JUMPER_GAME_RUNNER,
         JUMPER_GAME_OBSTACLE,
-        JUMPER_GAME_OBSTACLE_RECYCLER
+        JUMPER_GAME_OBSTACLE_RECYCLER,
+        TYPER_LETTER,
     }
 
     public enum Difficulty
