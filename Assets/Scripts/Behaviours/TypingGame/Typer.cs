@@ -16,8 +16,32 @@ public class Typer : MonoBehaviour
     private KeyCode currentKey;
     private bool isWon = false;
     private TimedAction countdownHandler;
+    private TimedAction timer;
     [SerializeField] public float countDownBeforeStart = 3f;
     private bool startCountdown = false;
+
+    private void SetCountDown()
+    {
+        this.countdownHandler = new TimedAction(
+            maxTime: this.countDownBeforeStart,
+            action: () => {
+                this.startCountdown = false;
+                this.StartGame();
+            },
+            triggerOnInitial: false
+        );
+    }
+
+    private void SetTimer()
+    {
+        this.timer = new TimedAction(
+            maxTime: 1f, // set dynamically later
+            action: () => {
+                this.HandleLose();
+            },
+            triggerOnInitial: false
+        );
+    }
 
     protected TyperWord GetCurrentWord()
     {
@@ -38,19 +62,9 @@ public class Typer : MonoBehaviour
         this.currentWord = this.GetCurrentWord();
         this.currentKey = this.GetCurrentCharacterKeyCode();
         this.countdownHandler.Reset();
+        this.timer.maxTime = this.currentWord.maxTimerCount;
+        this.timer.Reset();
         this.Cleanup();
-    }
-
-    private void SetCountDown()
-    {
-        this.countdownHandler = new TimedAction(
-            maxTime: this.countDownBeforeStart,
-            action: () => {
-                this.startCountdown = false;
-                this.StartGame();
-            },
-            triggerOnInitial: false
-        );
     }
 
     public void TriggerGameStart()
@@ -79,6 +93,7 @@ public class Typer : MonoBehaviour
     void Start()
     {
         this.SetCountDown();
+        this.SetTimer();
         this.Reset();
 
         // temporary
@@ -88,7 +103,14 @@ public class Typer : MonoBehaviour
     void HandleWin()
     {
         this.isWon = true;
+        this.Cleanup();
         Debug.Log("Typer has been won");
+    }
+
+    void HandleLose()
+    {
+        this.Cleanup();
+        Debug.Log("Typer is lost");
     }
 
     void RenderWord()
@@ -140,12 +162,18 @@ public class Typer : MonoBehaviour
             {
                 this.countdownHandler.RunOnce(Time.deltaTime);
                 float currentTime = Mathf.Ceil(this.countdownHandler.currentTime);
+                // TODO: pass countdown to UI
                 Debug.Log(currentTime);
             }
         }
 
         if(!this.isOngoing)
             return;
+
+        if(this.timer != null)
+        {
+            this.timer.RunOnce(Time.deltaTime);
+        }
 
         if(Input.GetKeyDown(this.currentKey))
         {
