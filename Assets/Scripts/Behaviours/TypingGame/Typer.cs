@@ -5,6 +5,12 @@ using TimerUtils;
 
 public class Typer : MonoBehaviour
 {
+    private static Typer instance;
+    public static Typer Instance
+    {
+        get { return instance; }
+    }
+
     [SerializeField] private TyperGUI gui;
     protected TyperWord currentWord;
     protected int currentCharacterIndex = 0;
@@ -21,6 +27,11 @@ public class Typer : MonoBehaviour
     private TimedAction timer;
     private TimedAction roundPauseTimer;
     [SerializeField] public float countDownBeforeStart = 3f;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     private void SetCountDown()
     {
@@ -72,6 +83,9 @@ public class Typer : MonoBehaviour
 
     public void Reset()
     {
+        this.SetCountDown();
+        this.SetTimer();
+        this.SetRoundPause();
         this.isWon = false;
         this.roundPause = false;
         this.currentCharacterIndex = 0;
@@ -108,17 +122,17 @@ public class Typer : MonoBehaviour
         return key;
     }
 
+    void HandleLose()
+    {
+        this.Cleanup();
+        GameManager.Instance.questDefinitions.FailMainObjective("typing-game", "type-in-all-words");
+    }
+
     void HandleWin()
     {
         this.isWon = true;
         this.Cleanup();
-        Debug.Log("Typer has been won");
-    }
-
-    void HandleLose()
-    {
-        this.Cleanup();
-        Debug.Log("Typer is lost");
+        GameManager.Instance.questDefinitions.ClearMainObjective("typing-game", "type-in-all-words");
     }
 
     void RenderWord()
@@ -173,13 +187,7 @@ public class Typer : MonoBehaviour
 
     void Start()
     {
-        this.SetCountDown();
-        this.SetTimer();
-        this.SetRoundPause();
         this.Reset();
-
-        // temporary
-        this.TriggerGameStart();
     }
 
     void Update()
