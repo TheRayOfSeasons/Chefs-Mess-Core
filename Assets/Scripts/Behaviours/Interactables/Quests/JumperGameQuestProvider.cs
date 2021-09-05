@@ -59,7 +59,6 @@ public class JumperGameQuestProvider : QuestProvider
                 }
             )
         );
-        GameManager.Instance.questDefinitions.ClearMainObjective("jumper", "arrive-at-finish-line");
     }
 
     public override void RunQuestIntro()
