@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SelectionUtils;
+using TimerUtils;
 
 // TODO: If we have extra time, refactor the code of this module to be more DRY.
 
@@ -17,6 +18,7 @@ public class TilePuzzle : MonoBehaviour
     [SerializeField] private float tileSize = 10f;
     [SerializeField] private bool isDone = false;
     [SerializeField] private Vector2 center = new Vector2(0, 0);
+    [SerializeField] private TilePuzzleGUI gui;
 
     /**
      * Make sure that the sprites applied to this field follow this order:
@@ -53,6 +55,35 @@ public class TilePuzzle : MonoBehaviour
     private Camera mainCamera;
     private GameObject selectedTile;
     private Dictionary<int, Vector2> currentConnections = new Dictionary<int, Vector2>();
+    private TimedAction timer;
+
+    private static TilePuzzle instance;
+    public static TilePuzzle Instance
+    {
+        get { return instance; }
+    }
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    private float GetCurrentMaxTime()
+    {
+        Constants.Difficulty difficulty = GameManager.Instance.GetCurrentDifficulty();
+        return TilePuzzleMeta.timerSettings[difficulty];
+    }
+
+    private void SetTimer()
+    {
+        this.timer = new TimedAction(
+            maxTime: this.GetCurrentMaxTime(),
+            action: () => {
+                this.HandleLose();
+            },
+            triggerOnInitial: false
+        );
+    }
 
     private GameObject CreateTile(int tileId, int xOffset, int yOffset)
     {
@@ -284,8 +315,7 @@ public class TilePuzzle : MonoBehaviour
         tileComponent.autoTarget = this.snappingPoints[currentIndex];
         tileComponent.selected = false;
 
-        this.isDone = this.CheckWin();
-        if(this.isDone)
+        if(this.CheckWin())
             this.HandleWin();
     }
 
@@ -305,8 +335,15 @@ public class TilePuzzle : MonoBehaviour
         }
     }
 
+    private void HandleLose()
+    {
+        this.isDone = true;
+        GameManager.Instance.questDefinitions.FailMainObjective("puzzle", "solve-the-puzzle");
+    }
+
     private void HandleWin()
     {
+        this.isDone = true;
         foreach(GameObject tile in this.hiddenTiles)
         {
             tile.SetActive(true);
@@ -325,12 +362,21 @@ public class TilePuzzle : MonoBehaviour
         return true;
     }
 
+    public void Reset()
+    {
+        this.ShuffleTiles();
+        this.timer.Reset();
+        this.gui.SetupTimerSlider(this.GetCurrentMaxTime());
+        this.isDone = false;
+    }
+
     void Start()
     {
         this.currentEmptyIndex = this.inactiveIndex;
 
         this.InitializeTiles();
-        this.ShuffleTiles();
+        this.SetTimer();
+        this.Reset();
         this.mainCamera = Camera.main;
     }
 
@@ -350,6 +396,12 @@ public class TilePuzzle : MonoBehaviour
         if(this.selectedTile)
         {
             HandlePuzzleInputs(this.selectedTile);
+        }
+
+        if(this.timer != null)
+        {
+            this.timer.RunOnce(Time.deltaTime);
+            this.gui.UpdateTimerSlider(this.timer.currentTime);
         }
     }
 }

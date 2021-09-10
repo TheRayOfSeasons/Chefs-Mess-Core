@@ -6,12 +6,19 @@ using QuestManagement;
 public class PuzzleQuestProvider : QuestProvider
 {
     [SerializeField] private GameObject tilePuzzle;
+    [SerializeField] private GameObject tileGUI;
 
     public override void Initialize()
     {
         base.Initialize();
         this.questKey = "puzzle";
         this.SetupQuest();
+    }
+
+    private void ToggleGame(bool toggle)
+    {
+        this.tileGUI.SetActive(toggle);
+        this.tilePuzzle.SetActive(toggle);
     }
 
     private void SetupQuest()
@@ -28,11 +35,25 @@ public class PuzzleQuestProvider : QuestProvider
                             name: "Solve the puzzle.",
                             description: "Solve the 3x3 puzzle",
                             onComplete: () => {
-                                Debug.Log("Puzzle objective completed!");
+                                UIManager.Instance.taskCompleteModal.SetContents(
+                                    description: "Nice! You solved the puzzle!",
+                                    exitEvent: () => {
+                                        this.ToggleGame(false);
+                                    }
+                                );
                                 UIManager.Instance.taskCompleteModal.ToggleToNonHub(true);
                             },
                             onFail: () => {
-                                Debug.Log("Puzzle objective Failed!");
+                                UIManager.Instance.taskFailedModal.SetContents(
+                                    description: "You ran out of time :(",
+                                    retryEvent: () => {
+                                        TilePuzzle.Instance.Reset();
+                                    },
+                                    exitEvent: () => {
+                                        TilePuzzle.Instance.Reset();
+                                        this.ToggleGame(false);
+                                    }
+                                );
                                 UIManager.Instance.taskFailedModal.ToggleToNonHub(true);
                             }
                         )
@@ -62,7 +83,8 @@ public class PuzzleQuestProvider : QuestProvider
                 title: quest.name,
                 description: quest.description,
                 startEvent: () => {
-                    this.tilePuzzle.SetActive(!this.tilePuzzle.activeSelf);
+                    this.ToggleGame(true);
+                    TilePuzzle.Instance.Reset();
                 }
             );
             UIManager.Instance.questModal.Toggle(true);
