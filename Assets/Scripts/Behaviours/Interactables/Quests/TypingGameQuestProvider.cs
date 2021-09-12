@@ -21,12 +21,20 @@ public class TypingGameQuestProvider : QuestProvider
         this.gui.SetActive(toggle);
     }
 
+    private void UpdateStress()
+    {
+        Constants.Difficulty difficulty = GameManager.Instance.GetCurrentDifficulty();
+        float stress = TyperMeta.stress[difficulty];
+        GameManager.Instance.stress.Add(stress);
+    }
+
     private void SetupQuest()
     {
         GameManager.Instance.AddActiveQuest(
             questKey: this.questKey,
             quest: new Quest(
                 name: "Typing Game",
+                questGroups: new List<QuestGroup>() { QuestGroups.MAIN, QuestGroups.PRIMARY },
                 description: "Type each word to cut the vegetables.",
                 mainObjectives: new Dictionary<string, MainObjective>() {
                     {
@@ -53,6 +61,7 @@ public class TypingGameQuestProvider : QuestProvider
                                     exitEvent: () => {
                                         Typer.Instance.Reset();
                                         this.ToggleGame(false);
+                                        this.UpdateStress();
                                     }
                                 );
                                 UIManager.Instance.taskFailedModal.ToggleToNonHub(true);
@@ -68,29 +77,19 @@ public class TypingGameQuestProvider : QuestProvider
         );
     }
 
-    public override void RunQuestIntro()
+    protected override void RunIntro(Quest quest)
     {
-        base.RunQuestIntro();
-        Quest quest = GameManager.Instance.questDefinitions.GetQuest(questKey: this.questKey);
-        Debug.Log("typing quest");
-        if(quest.isCompleted)
-        {
-            UIManager.Instance.questDoneModal.SetTitle(quest.name);
-            UIManager.Instance.questDoneModal.Toggle(true);
-        }
-        else
-        {
-            UIManager.Instance.questModal.SetContents(
-                title: quest.name,
-                description: quest.description,
-                startEvent: () => {
-                    GameManager.Instance.ToggleHubMode(false);
-                    this.ToggleGame(true);
-                    Typer.Instance.Reset();
-                    Typer.Instance.TriggerGameStart();
-                }
-            );
-            UIManager.Instance.questModal.Toggle(true);
-        }
+        base.RunIntro(quest);
+        UIManager.Instance.questModal.SetContents(
+            title: quest.name,
+            description: quest.description,
+            startEvent: () => {
+                GameManager.Instance.ToggleHubMode(false);
+                this.ToggleGame(true);
+                Typer.Instance.Reset();
+                Typer.Instance.TriggerGameStart();
+            }
+        );
+        UIManager.Instance.questModal.Toggle(true);
     }
 }

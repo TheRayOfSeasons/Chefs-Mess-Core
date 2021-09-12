@@ -14,12 +14,20 @@ public class JumperGameQuestProvider : QuestProvider
         this.SetupQuest();
     }
 
+    private void UpdateStress()
+    {
+        Constants.Difficulty difficulty = GameManager.Instance.GetCurrentDifficulty();
+        float stress = JumperMeta.stress[difficulty];
+        GameManager.Instance.stress.Add(stress);
+    }
+
     private void SetupQuest()
     {
         GameManager.Instance.AddActiveQuest(
             questKey: this.questKey,
             quest: new Quest(
                 name: "Jumper Game",
+                questGroups: new List<QuestGroup>() { QuestGroups.MAIN, QuestGroups.PRIMARY },
                 description: "Run run run!",
                 mainObjectives: new Dictionary<string, MainObjective>() {
                     {
@@ -46,6 +54,7 @@ public class JumperGameQuestProvider : QuestProvider
                                     exitEvent: () => {
                                         JumperGame.Instance.Cleanup();
                                         this.jumperGame.SetActive(false);
+                                        this.UpdateStress();
                                     }
                                 );
                                 UIManager.Instance.taskFailedModal.ToggleToNonHub(true);
@@ -61,28 +70,18 @@ public class JumperGameQuestProvider : QuestProvider
         );
     }
 
-    public override void RunQuestIntro()
+    protected override void RunIntro(Quest quest)
     {
-        base.RunQuestIntro();
-        Quest quest = GameManager.Instance.questDefinitions.GetQuest(questKey: questKey);
-
-        if(quest.isCompleted)
-        {
-            UIManager.Instance.questDoneModal.SetTitle(quest.name);
-            UIManager.Instance.questDoneModal.Toggle(true);
-        }
-        else
-        {
-            UIManager.Instance.questModal.SetContents(
-                title: quest.name,
-                description: quest.description,
-                startEvent: () => {
-                    GameManager.Instance.ToggleHubMode(false);
-                    this.jumperGame.SetActive(true);
-                    JumperGame.Instance.TriggerGameStart();
-                }
-            );
-            UIManager.Instance.questModal.Toggle(true);
-        }
+        base.RunIntro(quest);
+        UIManager.Instance.questModal.SetContents(
+            title: quest.name,
+            description: quest.description,
+            startEvent: () => {
+                GameManager.Instance.ToggleHubMode(false);
+                this.jumperGame.SetActive(true);
+                JumperGame.Instance.TriggerGameStart();
+            }
+        );
+        UIManager.Instance.questModal.Toggle(true);
     }
 }

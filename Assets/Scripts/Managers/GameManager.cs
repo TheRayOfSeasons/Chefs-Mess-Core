@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using QuestManagement;
+using StressManagement;
 
 public delegate void InteractabilityReceptor(GameObject interactableObject);
 
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     }
 
     public List<InteractabilityReceptor> interactionSubscriptions = new List<InteractabilityReceptor>();
+    public StressController stress;
     public GameObject hub;
     private int interactionsDone = 0;
     private bool isHubMode = true;
@@ -30,7 +32,60 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+        this.SetupQuests();
+        this.SetupStressController();
+    }
+
+    private void SetupQuests()
+    {
         this.questDefinitions = new QuestDefinitions();
+        this.AddActiveQuest("overall", new Quest(
+            name: "Finish the game.",
+            description: "Finish all quests",
+            mainObjectives: new Dictionary<string, MainObjective>() {
+                {
+                    "finish-all-quests",
+                    new MainObjective(
+                        name: "Finish all quests.",
+                        description: "",
+                        onComplete: () => {},
+                        onFail: () => {
+                            GameManager.Instance.HandleOverallLose();
+                        }
+                    )
+                }
+            },
+            optionalObjectives: new Dictionary<string, OptionalObjective>(),
+            onComplete: () => {
+                GameManager.Instance.HandleOverallWin();
+            }
+        ));
+    }
+
+    private void SetupStressController()
+    {
+        this.stress = new StressController(
+            onStressAdd: _stress => {
+                UIManager.Instance.hubGUI.UpdateStress(_stress);
+            },
+            onStressRelief: _stress => {
+                UIManager.Instance.hubGUI.UpdateStress(_stress);
+            },
+            onStressMax: () => {
+                this.questDefinitions.FailMainObjective("overall", "finish-all-quests");
+            }
+        );
+        UIManager.Instance.hubGUI.SetupStressSlider(this.stress.Meta.maxStress);
+    }
+
+    public void HandleOverallWin()
+    {
+        Debug.Log("Game has been won!");
+    }
+
+    public void HandleOverallLose()
+    {
+        Debug.Log("Game has been lost");
     }
 
     public void SetDifficulty(Constants.Difficulty difficulty)
@@ -65,6 +120,7 @@ public class GameManager : MonoBehaviour
     {
         this.isHubMode = !this.isHubMode;
         this.hub.SetActive(this.isHubMode);
+        UIManager.Instance.hubGUI.gameObject.SetActive(this.isHubMode);
         return this.isHubMode;
     }
 
@@ -72,6 +128,7 @@ public class GameManager : MonoBehaviour
     {
         this.isHubMode = toggle;
         this.hub.SetActive(this.isHubMode);
+        UIManager.Instance.hubGUI.gameObject.SetActive(this.isHubMode);
         return this.isHubMode;
     }
 

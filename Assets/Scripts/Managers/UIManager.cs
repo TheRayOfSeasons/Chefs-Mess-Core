@@ -10,11 +10,16 @@ public class UIManager : MonoBehaviour
         get { return instance; }
     }
 
+    [Header("Hub")]
+    public HubGUI hubGUI;
+
     [Header("Quests")]
     // for quest prompts
     public QuestModal questModal;
     // for quest prompts that were already completed
     public QuestDoneModal questDoneModal;
+    // for locked quests
+    public QuestLockedModal questLockedModal;
     // for after completing a quest
     public TaskCompleteModal taskCompleteModal;
     // for after failing a quest

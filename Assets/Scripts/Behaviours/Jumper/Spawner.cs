@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TimerUtils;
@@ -10,6 +11,12 @@ public class Spawner : MonoBehaviour
     [SerializeField] private GameObject prefab;
 
     private TimedAction timedAction;
+
+    void Awake()
+    {
+        if(this.prefab == null)
+            throw new NullReferenceException("\"prefab\" field must be assigned to \"Spawner\" component.");
+    }
 
     void Start()
     {

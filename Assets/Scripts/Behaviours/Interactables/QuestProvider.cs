@@ -5,7 +5,37 @@ public class QuestProvider : Interactable
 {
     public string questKey;
 
-    public virtual void RunQuestIntro() {}
+    protected virtual void RunCompletedAlready(Quest quest)
+    {
+        UIManager.Instance.questDoneModal.SetTitle(quest.name);
+        UIManager.Instance.questDoneModal.Toggle(true);
+    }
+
+    protected virtual void RunInaccesibleEvent(Quest quest)
+    {
+        UIManager.Instance.questLockedModal.SetTitle(quest.name);
+        UIManager.Instance.questLockedModal.Toggle(true);
+    }
+
+    protected virtual void RunIntro(Quest quest) {}
+
+    public void RunQuestIntro(Quest quest)
+    {
+        if(!quest.isAccessible)
+        {
+            this.RunInaccesibleEvent(quest);
+            return;
+        }
+
+        if(quest.isCompleted)
+        {
+            this.RunCompletedAlready(quest);
+        }
+        else
+        {
+            this.RunIntro(quest);
+        }
+    }
 
     public override void OnInteract()
     {
@@ -14,7 +44,8 @@ public class QuestProvider : Interactable
         {
             throw new ArgumentException("questKey must be defined.");
         }
-        this.RunQuestIntro();
+        Quest quest = GameManager.Instance.questDefinitions.GetQuest(questKey: this.questKey);
+        this.RunQuestIntro(quest);
     }
 
     public override void OnExitInteraction()
