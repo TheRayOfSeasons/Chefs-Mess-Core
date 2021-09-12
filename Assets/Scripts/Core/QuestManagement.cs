@@ -48,6 +48,13 @@ namespace QuestManagement
         public string name { get; protected set; }
         public string description { get; protected set; }
 
+        public TaskEntity(string name)
+        {
+            this.isCompleted = false;
+            this.name = name;
+            this.description = "";
+        }
+
         public TaskEntity(string name, string description)
         {
             this.isCompleted = false;
@@ -110,11 +117,41 @@ namespace QuestManagement
         }
     }
 
+
+    public class QuestGroup : TaskEntity
+    {
+        public List<Quest> quests = new List<Quest>();
+
+        public QuestGroup(
+                string name,
+                CompletionEvent onComplete
+            ) : base(name)
+        {
+            this.onComplete = onComplete;
+        }
+
+        protected override bool CheckCompletion()
+        {
+            foreach(Quest quest in this.quests)
+            {
+                if(!quest.isCompleted)
+                    return false;
+            }
+            return true;
+        }
+
+        public void AddQuest(Quest quest)
+        {
+            this.quests.Add(quest);
+        }
+    }
+
     public class Quest : TaskEntity
     {
         public bool isAccessible { get; protected set; }
         public Dictionary<string, MainObjective> mainObjectives { get; protected set; }
         public Dictionary<string, OptionalObjective> optionalObjectives { get; protected set; }
+        public List<QuestGroup> questGroups;
 
         public Quest(
                 string name,
@@ -128,6 +165,28 @@ namespace QuestManagement
             this.mainObjectives = mainObjectives;
             this.optionalObjectives = optionalObjectives;
             this.onComplete = onComplete;
+        }
+
+        public Quest(
+                string name,
+                string description,
+                Dictionary<string, MainObjective> mainObjectives,
+                Dictionary<string, OptionalObjective> optionalObjectives,
+                CompletionEvent onComplete,
+                List<QuestGroup> questGroups
+            ) : base(name, description)
+        {
+            this.isAccessible = true;
+            this.mainObjectives = mainObjectives;
+            this.optionalObjectives = optionalObjectives;
+            this.onComplete = () => {
+                onComplete();
+                foreach(QuestGroup group in this.questGroups)
+                {
+                    group.Update();
+                }
+            };
+            this.questGroups = questGroups;
         }
 
         public void Lock()
