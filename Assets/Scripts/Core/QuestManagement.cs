@@ -41,6 +41,12 @@ namespace QuestManagement
                 this.RunOnComplete();
             }
         }
+
+        public virtual void Reset()
+        {
+            this.isCompleted = false;
+            this.isCompletionEventTriggered = false;
+        }
     }
 
     public class TaskEntity : CompletionTracker
@@ -144,6 +150,13 @@ namespace QuestManagement
         {
             this.quests.Add(quest);
         }
+
+        public override void Reset()
+        {
+            base.Reset();
+            foreach(Quest quest in this.quests)
+                quest.Reset();
+        }
     }
 
     public class Quest : TaskEntity
@@ -202,6 +215,15 @@ namespace QuestManagement
         public void ToggleLock()
         {
             this.isAccessible = !this.isAccessible;
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            foreach(KeyValuePair<string, MainObjective> mainObjective in this.mainObjectives)
+                mainObjective.Value.Reset();
+            foreach(KeyValuePair<string, OptionalObjective> optionalObjective in this.optionalObjectives)
+                optionalObjective.Value.Reset();
         }
 
         protected override bool CheckCompletion()

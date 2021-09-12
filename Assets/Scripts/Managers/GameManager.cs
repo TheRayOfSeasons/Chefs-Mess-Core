@@ -98,6 +98,24 @@ public class GameManager : MonoBehaviour
         return this.currentDay;
     }
 
+    public bool AllowedToSleep()
+    {
+        return QuestGroups.MAIN.isCompleted;
+    }
+
+    public void SleepToNextDay()
+    {
+        // TODO: add delay if we want to add animation in between sleeps
+        this.ResetQuests();
+        this.PushToNextDay();
+    }
+
+    public void ResetQuests()
+    {
+        QuestGroups.MAIN.Reset();
+        this.questDefinitions.GetQuest("puzzle").Lock();
+    }
+
     public int PushToNextDay()
     {
         this.currentDay++;
@@ -108,6 +126,7 @@ public class GameManager : MonoBehaviour
         Constants.Difficulty newDifficulty = hasDifficulty
             ? this.difficultyMapByDay[this.currentDay]
             : defaultDifficulty;
+        this.difficulty = newDifficulty;
         return this.currentDay;
     }
 

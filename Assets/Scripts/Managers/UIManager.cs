@@ -25,6 +25,10 @@ public class UIManager : MonoBehaviour
     // for after failing a quest
     public TaskFailedModal taskFailedModal;
 
+    [Header("Bed")]
+    public BedModal bedModal;
+    public CantSleepModal cantSleepModal;
+
     void Awake()
     {
         instance = this;
