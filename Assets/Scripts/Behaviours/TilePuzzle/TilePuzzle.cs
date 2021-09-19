@@ -56,6 +56,7 @@ public class TilePuzzle : MonoBehaviour
     private GameObject selectedTile;
     private Dictionary<int, Vector2> currentConnections = new Dictionary<int, Vector2>();
     private TimedAction timer;
+    private GameObject inactiveTile;
 
     private static TilePuzzle instance;
     public static TilePuzzle Instance
@@ -152,6 +153,7 @@ public class TilePuzzle : MonoBehaviour
                     snapComponent.occupied = false;
                     this.hiddenTiles.Add(tile);
                     tile.SetActive(false);
+                    inactiveTile = tile;
                 }
                 this.snappingDetectors.Add(snapDetector);
                 this.snappingPoints.Add(position);
@@ -365,6 +367,10 @@ public class TilePuzzle : MonoBehaviour
     public void Reset()
     {
         this.ShuffleTiles();
+        if(this.inactiveTile != null)
+        {
+            this.inactiveTile.SetActive(false);
+        }
         this.timer.Reset();
         this.gui.SetupTimerSlider(this.GetCurrentMaxTime());
         this.isDone = false;
