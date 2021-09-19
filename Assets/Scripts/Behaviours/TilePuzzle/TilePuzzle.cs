@@ -373,9 +373,8 @@ public class TilePuzzle : MonoBehaviour
     void Start()
     {
         this.currentEmptyIndex = this.inactiveIndex;
-
-        this.InitializeTiles();
         this.SetTimer();
+        this.InitializeTiles();
         this.Reset();
         this.mainCamera = Camera.main;
     }

@@ -13,6 +13,7 @@ public class BedModal : Modal
         base.Initialize();
         this.actionButtonComponent.onClick.AddListener(() => {
             GameManager.Instance.SleepToNextDay();
+            this.Toggle(false);
         });
     }
 }

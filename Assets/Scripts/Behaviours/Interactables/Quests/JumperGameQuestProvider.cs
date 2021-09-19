@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using QuestManagement;
@@ -79,6 +80,18 @@ public class JumperGameQuestProvider : QuestProvider
             startEvent: () => {
                 GameManager.Instance.ToggleHubMode(false);
                 this.jumperGame.SetActive(true);
+                try
+                {
+                    JumperGame.Instance.Reset();
+                }
+                catch(NullReferenceException)
+                {
+                    /*
+                        Do nothing. In this case, the JumperGame
+                        wasn't initialized yet. The start function
+                        will handle it.
+                    */
+                }
                 JumperGame.Instance.TriggerGameStart();
             }
         );

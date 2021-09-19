@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetQuests()
     {
+        QuestGroups.PRIMARY.Reset();
         QuestGroups.MAIN.Reset();
         this.questDefinitions.GetQuest("puzzle").Lock();
     }

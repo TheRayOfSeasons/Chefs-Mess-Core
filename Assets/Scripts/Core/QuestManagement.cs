@@ -154,6 +154,7 @@ namespace QuestManagement
         public override void Reset()
         {
             base.Reset();
+            Debug.Log($"Resetting quest group {this.name}");
             foreach(Quest quest in this.quests)
                 quest.Reset();
         }
@@ -192,14 +193,14 @@ namespace QuestManagement
             this.isAccessible = true;
             this.mainObjectives = mainObjectives;
             this.optionalObjectives = optionalObjectives;
+            this.questGroups = questGroups;
             this.onComplete = () => {
                 onComplete();
                 foreach(QuestGroup group in this.questGroups)
-                {
                     group.Update();
-                }
             };
-            this.questGroups = questGroups;
+            foreach(QuestGroup group in this.questGroups)
+                group.AddQuest(this);
         }
 
         public void Lock()

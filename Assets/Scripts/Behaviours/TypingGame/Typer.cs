@@ -95,6 +95,8 @@ public class Typer : MonoBehaviour
         this.countdownHandler.Reset();
         this.timer.maxTime = this.currentWord.maxTimerCount;
         this.gui.SetupTimerSlider(this.currentWord.maxTimerCount);
+        this.gui.DisposeCurrentWord();
+        this.gui.ToggleCelebratoryText(false);
         this.timer.Reset();
         this.Cleanup();
     }
