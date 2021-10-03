@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerAnimation))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerController : MonoBehaviour
@@ -9,10 +10,12 @@ public class PlayerController : MonoBehaviour
     public bool isControllable = true;
     public float speed = 5.0f;
 
+    private PlayerAnimation playerAnimation;
     private Rigidbody2D rb;
 
     void Start()
     {
+        this.playerAnimation = this.GetComponent<PlayerAnimation>();
         this.rb = this.GetComponent<Rigidbody2D>();
         this.rb.gravityScale = 0;
     }
@@ -42,6 +45,9 @@ public class PlayerController : MonoBehaviour
 
         Vector2 movement = new Vector2(directionX * speed, directionY * speed);
         this.rb.velocity = movement;
+
+        Vector2 direction = new Vector2(directionX, directionY);
+        this.playerAnimation.Walk(direction);
     }
 
     void FixedUpdate()
