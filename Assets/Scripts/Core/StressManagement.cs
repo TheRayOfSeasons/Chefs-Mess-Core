@@ -1,7 +1,7 @@
 ﻿namespace StressManagement
 {
-    public delegate void OnStressAdd(float stress);
-    public delegate void OnStressRelief(float stress);
+    public delegate void OnStressAdd(float stress, float maxStress);
+    public delegate void OnStressRelief(float stress, float maxStress);
     public delegate void OnStressMax();
 
     public class StressMeta
@@ -46,14 +46,14 @@
         public void Add(float stress)
         {
             this.currentStress += stress;
-            this.onStressAdd(this.currentStress);
+            this.onStressAdd(this.currentStress, this.Meta.maxStress);
             this.Check();
         }
 
         public void Relieve(float stress)
         {
             this.currentStress -= stress;
-            this.onStressRelief(this.currentStress);
+            this.onStressRelief(this.currentStress, this.Meta.maxStress);
             this.Check();
         }
 

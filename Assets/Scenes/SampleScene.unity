@@ -2343,6 +2343,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1278995597}
     m_Modifications:
+    - target: {fileID: 5143991416725170282, guid: 76f8e410045ee4649ac6e77133cbd100,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -22.399994
+      objectReference: {fileID: 0}
     - target: {fileID: 5143991418844079690, guid: 76f8e410045ee4649ac6e77133cbd100,
         type: 3}
       propertyPath: m_Name
@@ -2474,6 +2479,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1278995597}
     m_Modifications:
+    - target: {fileID: 672314230523222805, guid: df5d2376534160c43adc77f6c26f154e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -22.399994
+      objectReference: {fileID: 0}
     - target: {fileID: 672314232432416052, guid: df5d2376534160c43adc77f6c26f154e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2714,6 +2724,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: QuestModal
+      objectReference: {fileID: 0}
+    - target: {fileID: 2731982707704935959, guid: 98bdcecc5fadaf94a9af6dece219d18a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -22.399994
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98bdcecc5fadaf94a9af6dece219d18a, type: 3}
@@ -3478,30 +3493,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3117376213767144611, guid: 235277c6eac01b744853e0633b55fdee,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -292
-      objectReference: {fileID: 0}
-    - target: {fileID: 4877359454605358144, guid: 235277c6eac01b744853e0633b55fdee,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6347268947435975313, guid: 235277c6eac01b744853e0633b55fdee,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7856336833356082806, guid: 235277c6eac01b744853e0633b55fdee,
         type: 3}
       propertyPath: m_Name
       value: HubGUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515860652784260392, guid: 235277c6eac01b744853e0633b55fdee,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -294.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 235277c6eac01b744853e0633b55fdee, type: 3}
@@ -3518,6 +3513,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1278995597}
     m_Modifications:
+    - target: {fileID: 1026065728510737042, guid: fd490b601e5a32241b066fc5ddaab9eb,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -22.399994
+      objectReference: {fileID: 0}
     - target: {fileID: 1026065729039965177, guid: fd490b601e5a32241b066fc5ddaab9eb,
         type: 3}
       propertyPath: m_IsActive

@@ -65,17 +65,17 @@ public class GameManager : MonoBehaviour
     private void SetupStressController()
     {
         this.stress = new StressController(
-            onStressAdd: _stress => {
-                UIManager.Instance.hubGUI.UpdateStress(_stress);
+            onStressAdd: (currentStress, maxStress) => {
+                UIManager.Instance.hubGUI.UpdateStress(currentStress, maxStress);
             },
-            onStressRelief: _stress => {
-                UIManager.Instance.hubGUI.UpdateStress(_stress);
+            onStressRelief:( currentStress, maxStress) => {
+                UIManager.Instance.hubGUI.UpdateStress(currentStress, maxStress);
             },
             onStressMax: () => {
                 this.questDefinitions.FailMainObjective("overall", "finish-all-quests");
             }
         );
-        UIManager.Instance.hubGUI.SetupStressSlider(this.stress.Meta.maxStress);
+        UIManager.Instance.hubGUI.UpdateStress(this.stress.currentStress, this.stress.Meta.maxStress);
     }
 
     public void HandleOverallWin()
@@ -128,6 +128,7 @@ public class GameManager : MonoBehaviour
             ? this.difficultyMapByDay[this.currentDay]
             : defaultDifficulty;
         this.difficulty = newDifficulty;
+        UIManager.Instance.hubGUI.UpdateDay(this.currentDay);
         return this.currentDay;
     }
 
