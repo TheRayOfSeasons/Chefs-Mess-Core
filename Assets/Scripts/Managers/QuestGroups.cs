@@ -12,7 +12,7 @@ public class QuestGroups
         Quest quest;
         try
         {
-            quest = GameManager.Instance.questDefinitions.GetQuest("puzzle");
+            quest = GameManager.Instance.questDefinitions.GetQuest("jumper");
         }
         catch(NullReferenceException)
         {

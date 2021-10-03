@@ -24,50 +24,53 @@ public class JumperGameQuestProvider : QuestProvider
 
     private void SetupQuest()
     {
+        Quest quest = new Quest(
+            name: "Jumper Game",
+            questGroups: new List<QuestGroup>() { QuestGroups.MAIN },
+            description: "Run run run!",
+            mainObjectives: new Dictionary<string, MainObjective>() {
+                {
+                    "arrive-at-finish-line",
+                    new MainObjective(
+                        name: "Survive for 60 seconds.",
+                        description: "Press space to jump. Avoid all obstacles for 60 seconds.",
+                        onComplete: () => {
+                            UIManager.Instance.taskCompleteModal.SetContents(
+                                description: "Hooray! You got to the finish line!",
+                                exitEvent: () => {
+                                    this.jumperGame.SetActive(false);
+                                }
+                            );
+                            UIManager.Instance.taskCompleteModal.ToggleToNonHub(true);
+                        },
+                        onFail: () => {
+                            UIManager.Instance.taskFailedModal.SetContents(
+                                description: "Oops! You bumped into something.",
+                                retryEvent: () => {
+                                    JumperGame.Instance.Reset();
+                                    JumperGame.Instance.TriggerGameStart();
+                                },
+                                exitEvent: () => {
+                                    JumperGame.Instance.Cleanup();
+                                    this.jumperGame.SetActive(false);
+                                    this.UpdateStress();
+                                }
+                            );
+                            UIManager.Instance.taskFailedModal.ToggleToNonHub(true);
+                        }
+                    )
+                }
+            },
+            optionalObjectives: new Dictionary<string, OptionalObjective>(),
+            onComplete: () => {
+                Debug.Log("Jumper game completed!");
+            }
+        );
+        /// locked initially
+        quest.Lock();
         GameManager.Instance.AddActiveQuest(
             questKey: this.questKey,
-            quest: new Quest(
-                name: "Jumper Game",
-                questGroups: new List<QuestGroup>() { QuestGroups.MAIN, QuestGroups.PRIMARY },
-                description: "Run run run!",
-                mainObjectives: new Dictionary<string, MainObjective>() {
-                    {
-                        "arrive-at-finish-line",
-                        new MainObjective(
-                            name: "Survive for 60 seconds.",
-                            description: "Press space to jump. Avoid all obstacles for 60 seconds.",
-                            onComplete: () => {
-                                UIManager.Instance.taskCompleteModal.SetContents(
-                                    description: "Hooray! You got to the finish line!",
-                                    exitEvent: () => {
-                                        this.jumperGame.SetActive(false);
-                                    }
-                                );
-                                UIManager.Instance.taskCompleteModal.ToggleToNonHub(true);
-                            },
-                            onFail: () => {
-                                UIManager.Instance.taskFailedModal.SetContents(
-                                    description: "Oops! You bumped into something.",
-                                    retryEvent: () => {
-                                        JumperGame.Instance.Reset();
-                                        JumperGame.Instance.TriggerGameStart();
-                                    },
-                                    exitEvent: () => {
-                                        JumperGame.Instance.Cleanup();
-                                        this.jumperGame.SetActive(false);
-                                        this.UpdateStress();
-                                    }
-                                );
-                                UIManager.Instance.taskFailedModal.ToggleToNonHub(true);
-                            }
-                        )
-                    }
-                },
-                optionalObjectives: new Dictionary<string, OptionalObjective>(),
-                onComplete: () => {
-                    Debug.Log("Jumper game completed!");
-                }
-            )
+            quest: quest
         );
     }
 

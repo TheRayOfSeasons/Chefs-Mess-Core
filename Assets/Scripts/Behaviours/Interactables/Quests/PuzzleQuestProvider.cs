@@ -32,7 +32,7 @@ public class PuzzleQuestProvider : QuestProvider
     {
         Quest quest = new Quest(
             name: "Puzzle Quest",
-            questGroups: new List<QuestGroup>() { QuestGroups.MAIN },
+            questGroups: new List<QuestGroup>() { QuestGroups.MAIN, QuestGroups.PRIMARY },
             description: "Solve a puzzle",
             mainObjectives: new Dictionary<string, MainObjective>() {
                 {
@@ -71,8 +71,6 @@ public class PuzzleQuestProvider : QuestProvider
                 Debug.Log("Puzzle Quest completed!");
             }
         );
-        /// locked initially
-        quest.Lock();
         GameManager.Instance.AddActiveQuest(
             questKey: this.questKey,
             quest: quest
