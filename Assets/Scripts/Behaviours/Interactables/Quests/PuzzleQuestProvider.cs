@@ -7,6 +7,7 @@ public class PuzzleQuestProvider : QuestProvider
 {
     [SerializeField] private GameObject tilePuzzle;
     [SerializeField] private GameObject tileGUI;
+    [SerializeField] private GameObject cutscene;
 
     public override void Initialize()
     {
@@ -31,9 +32,9 @@ public class PuzzleQuestProvider : QuestProvider
     private void SetupQuest()
     {
         Quest quest = new Quest(
-            name: "Puzzle Quest",
+            name: "Puzzle Recipe",
             questGroups: new List<QuestGroup>() { QuestGroups.MAIN, QuestGroups.PRIMARY },
-            description: "Solve a puzzle",
+            description: "Arrange a 3x3 tile image puzzle",
             mainObjectives: new Dictionary<string, MainObjective>() {
                 {
                     "solve-the-puzzle",
@@ -80,6 +81,7 @@ public class PuzzleQuestProvider : QuestProvider
     protected override void RunIntro(Quest quest)
     {
         base.RunIntro(quest);
+        this.cutscene.SetActive(true);
         UIManager.Instance.questModal.SetContents(
             title: quest.name,
             description: quest.description,

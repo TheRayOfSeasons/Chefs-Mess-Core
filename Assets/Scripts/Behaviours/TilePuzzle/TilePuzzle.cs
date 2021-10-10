@@ -13,10 +13,11 @@ public class TilePuzzle : MonoBehaviour
     [SerializeField] private int inactiveIndex = 3;
     [SerializeField] private int xCount = 3;
     [SerializeField] private int yCount = 3;
-    [SerializeField] private float xPadding = 2f;
-    [SerializeField] private float yPadding = 2f;
+    [SerializeField] private float xPadding = 1.85f;
+    [SerializeField] private float yPadding = 2.2f;
     [SerializeField] private float tileSize = 10f;
     [SerializeField] private bool isDone = false;
+    [SerializeField] private bool isStarted = false;
     [SerializeField] private Vector2 center = new Vector2(0, 0);
     [SerializeField] private TilePuzzleGUI gui;
 
@@ -42,6 +43,9 @@ public class TilePuzzle : MonoBehaviour
      * -------------------------------------------------------------------------
      */
     [SerializeField] private Sprite[] tileSprite;
+    [SerializeField] private Sprite[] easyTiles;
+    [SerializeField] private Sprite[] mediumTiles;
+    [SerializeField] private Sprite[] hardTiles;
 
     private string tileNamePrefix = "Tile";
     private string snapperNamePrefix = "SnapDetector";
@@ -86,6 +90,21 @@ public class TilePuzzle : MonoBehaviour
         );
     }
 
+    private Sprite[] GetTileSet()
+    {
+        Constants.Difficulty difficulty = GameManager.Instance.GetCurrentDifficulty();
+        switch(difficulty)
+        {
+            case Constants.Difficulty.EASY:
+                return this.easyTiles;
+            case Constants.Difficulty.MEDIUM:
+                return this.mediumTiles;
+            case Constants.Difficulty.HARD:
+                return this.hardTiles;
+        }
+        return this.easyTiles;
+    }
+
     private GameObject CreateTile(int tileId, int xOffset, int yOffset)
     {
         GameObject tile = new GameObject();
@@ -93,7 +112,7 @@ public class TilePuzzle : MonoBehaviour
         tile.name = $"{this.tileNamePrefix}-{tileId}";
         SpriteRenderer renderer = tile.AddComponent<SpriteRenderer>();
 
-        renderer.sprite = this.tileSprite[tileId];
+        renderer.sprite = this.GetTileSet()[tileId];
         Tile tileScript = tile.AddComponent<Tile>();
         tileScript.correctIndex = tileId;
         tileScript.currentIndex = tileId;
@@ -371,9 +390,18 @@ public class TilePuzzle : MonoBehaviour
         {
             this.inactiveTile.SetActive(false);
         }
-        this.timer.Reset();
+        if(this.timer != null)
+        {
+            this.timer.Reset();
+        }
         this.gui.SetupTimerSlider(this.GetCurrentMaxTime());
         this.isDone = false;
+        this.isStarted = false;
+    }
+
+    public void StartGame()
+    {
+        this.isStarted = true;
     }
 
     void Start()
@@ -387,6 +415,9 @@ public class TilePuzzle : MonoBehaviour
 
     void Update()
     {
+        if(!this.isStarted)
+            return;
+
         if(this.isDone)
             return;
 
