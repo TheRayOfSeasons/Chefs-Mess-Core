@@ -394,13 +394,14 @@ public class TilePuzzle : MonoBehaviour
         {
             this.timer.Reset();
         }
-        this.gui.SetupTimerSlider(this.GetCurrentMaxTime());
+        this.gui.UpdateTimerSlider(this.timer.maxTime, this.timer.maxTime);
         this.isDone = false;
         this.isStarted = false;
     }
 
     public void StartGame()
     {
+        // TODO: add tutorials
         this.isStarted = true;
     }
 
@@ -415,8 +416,8 @@ public class TilePuzzle : MonoBehaviour
 
     void Update()
     {
-        if(!this.isStarted)
-            return;
+        // if(!this.isStarted)
+        //     return;
 
         if(this.isDone)
             return;
@@ -437,7 +438,7 @@ public class TilePuzzle : MonoBehaviour
         if(this.timer != null)
         {
             this.timer.RunOnce(Time.deltaTime);
-            this.gui.UpdateTimerSlider(this.timer.currentTime);
+            this.gui.UpdateTimerSlider(this.timer.currentTime, this.timer.maxTime);
         }
     }
 }

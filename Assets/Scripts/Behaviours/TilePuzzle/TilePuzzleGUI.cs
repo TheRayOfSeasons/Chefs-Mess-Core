@@ -5,16 +5,31 @@ using UnityEngine.UI;
 
 public class TilePuzzleGUI : MonoBehaviour
 {
-    [SerializeField] private Slider timerSlider;
+    [SerializeField] private Image timerSlider;
 
-    public void SetupTimerSlider(float maxTime)
+    [Header("Fill Sprites")]
+    [SerializeField] private Sprite green;
+    [SerializeField] private Sprite yellow;
+    [SerializeField] private Sprite red;
+
+    private Sprite GetTimerSprite(float normalizedTime)
     {
-        this.timerSlider.maxValue = maxTime;
-        this.timerSlider.value = maxTime;
+        if(normalizedTime >= 0.67f && normalizedTime <= 1f)
+        {
+            return this.green;
+        }
+        else if(normalizedTime >= 0.34f && normalizedTime < 0.67f)
+        {
+            return this.yellow;
+        }
+        return this.red;
     }
 
-    public void UpdateTimerSlider(float time)
+    public void UpdateTimerSlider(float time, float maxTime)
     {
-        this.timerSlider.value = time;
+        float normalizedTime = time / maxTime;
+        this.timerSlider.fillAmount = normalizedTime;
+        Sprite timerSprite = this.GetTimerSprite(normalizedTime);
+        this.timerSlider.sprite = timerSprite;
     }
 }
