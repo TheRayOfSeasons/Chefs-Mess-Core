@@ -12,7 +12,7 @@ public class Typer : MonoBehaviour
     }
 
     [SerializeField] private TyperGUI gui;
-    protected TyperWord currentWord;
+    protected TyperWordSet currentWordSet;
     protected int currentCharacterIndex = 0;
     protected int currentRound = 1;
 
@@ -70,10 +70,15 @@ public class Typer : MonoBehaviour
         );
     }
 
-    protected TyperWord GetCurrentWord()
+    protected TyperWordSet GetCurrentWordSet()
     {
         Constants.Difficulty difficulty = GameManager.Instance.GetCurrentDifficulty();
         return TyperMeta.words[difficulty];
+    }
+
+    protected string GetCurrentWord()
+    {
+        return this.GetCurrentWordSet().words[this.currentRound - 1];
     }
 
     public void Cleanup()
@@ -90,10 +95,10 @@ public class Typer : MonoBehaviour
         this.roundPause = false;
         this.currentCharacterIndex = 0;
         this.currentRound = 1;
-        this.currentWord = this.GetCurrentWord();
+        this.currentWordSet = this.GetCurrentWordSet();
         this.currentKey = this.GetCurrentCharacterKeyCode();
         this.countdownHandler.Reset();
-        this.timer.maxTime = this.currentWord.maxTimerCount;
+        this.timer.maxTime = this.currentWordSet.maxTimerCount;
         this.gui.UpdateTimerSlider(this.timer.maxTime, this.timer.maxTime);
         this.gui.DisposeCurrentWord();
         this.gui.ToggleCelebratoryText(false);
@@ -114,7 +119,7 @@ public class Typer : MonoBehaviour
 
     public char GetCurrentCharacter()
     {
-        return this.currentWord.word[this.currentCharacterIndex];
+        return this.GetCurrentWord()[this.currentCharacterIndex];
     }
 
     public KeyCode GetCurrentCharacterKeyCode()
@@ -139,7 +144,7 @@ public class Typer : MonoBehaviour
 
     void RenderWord()
     {
-        this.gui.RenderWord(this.currentWord.word);
+        this.gui.RenderWord(this.GetCurrentWord());
     }
 
     void HandleBeforeWordRerender()
@@ -152,7 +157,7 @@ public class Typer : MonoBehaviour
     void HandleRoundChange()
     {
         this.currentRound++;
-        if(this.currentRound > this.currentWord.rounds)
+        if(this.currentRound > this.currentWordSet.rounds)
         {
             this.HandleWin();
         }
@@ -163,13 +168,12 @@ public class Typer : MonoBehaviour
         char previousCharacter = this.GetCurrentCharacter();
         int previousIndex = this.currentCharacterIndex;
 
-        int lastIndex = this.currentWord.word.Length - 1;
+        int lastIndex = this.GetCurrentWord().Length - 1;
         int oldIndex = this.currentCharacterIndex;
         int newIndex = this.currentCharacterIndex < lastIndex
             ? this.currentCharacterIndex + 1
             : 0;
         this.currentCharacterIndex = newIndex;
-        this.currentKey = this.GetCurrentCharacterKeyCode();
 
         this.AfterCharacterPress(previousCharacter, previousIndex);
         if(previousIndex == lastIndex)
@@ -180,6 +184,10 @@ public class Typer : MonoBehaviour
         {
             this.HandleRoundChange();
         }
+
+        if(this.isWon)
+            return;
+        this.currentKey = this.GetCurrentCharacterKeyCode();
     }
 
     void AfterCharacterPress(char character, int characterIndex)

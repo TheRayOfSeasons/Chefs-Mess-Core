@@ -2,26 +2,106 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TyperWord
+public class TyperWordSet
 {
-    public string word;
-    public int rounds;
+    public string[] words;
     public float maxTimerCount;
-
-    public TyperWord(string word, int rounds, float maxTimerCount)
+    public float rounds
     {
-        this.word = word;
-        this.rounds = rounds;
+        get
+        {
+            return this.words.Length;
+        }
+    }
+
+    public TyperWordSet(string[] words, float maxTimerCount)
+    {
+        this.words = words;
         this.maxTimerCount = maxTimerCount;
     }
 }
 
 public class TyperMeta
 {
-    public static Dictionary<Constants.Difficulty, TyperWord> words = new Dictionary<Constants.Difficulty, TyperWord>() {
-        {Constants.Difficulty.EASY, new TyperWord("brocolis", 3, 120f)},
-        {Constants.Difficulty.MEDIUM, new TyperWord("tomatoes", 3, 120f)},
-        {Constants.Difficulty.HARD, new TyperWord("carrots", 4, 120f)}
+    public static Dictionary<Constants.Difficulty, TyperWordSet> words = new Dictionary<Constants.Difficulty, TyperWordSet>() {
+        {Constants.Difficulty.EASY, new TyperWordSet(
+                new string[] {
+                    "cope",
+                    "bite",
+                    "fund",
+                    "grip",
+                    "boil",
+                    "shop",
+                    "spin",
+                    "head",
+                    "hold",
+                    "stem",
+                    "fire",
+                    "wrap",
+                    "flow",
+                    "stir",
+                    "rise",
+                    "care",
+                    "slow",
+                    "melt",
+                    "calm",
+                    "feed"
+                },
+                120f
+            )
+        },
+        {Constants.Difficulty.MEDIUM, new TyperWordSet(
+                new string[] {
+                    "alert",
+                    "sense",
+                    "weigh",
+                    "state",
+                    "trade",
+                    "cover",
+                    "check",
+                    "smoke",
+                    "agree",
+                    "doubt",
+                    "admit",
+                    "break",
+                    "occur",
+                    "shake",
+                    "boost",
+                    "react",
+                    "stick",
+                    "spill",
+                    "prove",
+                    "clean"
+                },
+                120f
+            )
+        },
+        {Constants.Difficulty.HARD, new TyperWordSet(
+                new string[] {
+                    "tempt",
+                    "think",
+                    "worry",
+                    "relax",
+                    "waste",
+                    "drift",
+                    "shrug",
+                    "frown",
+                    "press",
+                    "crush",
+                    "limit",
+                    "plant",
+                    "argue",
+                    "blame",
+                    "solve",
+                    "adapt",
+                    "store",
+                    "apply",
+                    "speed",
+                    "carve"
+                },
+                120f
+            )
+        }
     };
     public static Dictionary<Constants.Difficulty, float> stress = new Dictionary<Constants.Difficulty, float>() {
         {Constants.Difficulty.EASY, 100f},
