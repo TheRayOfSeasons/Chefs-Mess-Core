@@ -29,6 +29,9 @@ public class UIManager : MonoBehaviour
     public BedModal bedModal;
     public CantSleepModal cantSleepModal;
 
+    [Header("Countdown")]
+    public CountdownSignal countdownSignal;
+
     void Awake()
     {
         instance = this;

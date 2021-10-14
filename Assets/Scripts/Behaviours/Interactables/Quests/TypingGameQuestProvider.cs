@@ -8,6 +8,7 @@ public class TypingGameQuestProvider : QuestProvider
     [SerializeField] private GameObject typingGame;
     [SerializeField] private GameObject gui;
     [SerializeField] private GameObject cutscene;
+    [SerializeField] private GameObject tutorial;
 
     public override void Initialize()
     {
@@ -87,9 +88,8 @@ public class TypingGameQuestProvider : QuestProvider
             description: quest.description,
             startEvent: () => {
                 GameManager.Instance.ToggleHubMode(false);
-                this.ToggleGame(true);
-                Typer.Instance.Reset();
-                Typer.Instance.TriggerGameStart();
+                this.gui.SetActive(true);
+                this.tutorial.SetActive(true);
             }
         );
         UIManager.Instance.questModal.Toggle(true);

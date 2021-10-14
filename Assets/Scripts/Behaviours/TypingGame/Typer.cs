@@ -47,6 +47,7 @@ public class Typer : MonoBehaviour
         this.countdownHandler = new TimedAction(
             maxTime: this.countDownBeforeStart,
             action: () => {
+                UIManager.Instance.countdownSignal.Toggle(false);
                 this.startCountdown = false;
                 this.StartGame();
             },
@@ -121,6 +122,7 @@ public class Typer : MonoBehaviour
     public void TriggerGameStart()
     {
         this.startCountdown = true;
+        UIManager.Instance.countdownSignal.Toggle(true);
     }
 
     public void StartGame()
@@ -228,8 +230,7 @@ public class Typer : MonoBehaviour
             {
                 this.countdownHandler.RunOnce(Time.deltaTime);
                 float currentTime = Mathf.Ceil(this.countdownHandler.currentTime);
-                // TODO: pass countdown to UI
-                Debug.Log(currentTime);
+                UIManager.Instance.countdownSignal.UpdateValue((int)currentTime);
             }
         }
 
