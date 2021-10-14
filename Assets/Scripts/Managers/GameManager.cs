@@ -6,6 +6,13 @@ using StressManagement;
 
 public delegate void InteractabilityReceptor(GameObject interactableObject);
 
+public class PauseManager
+{
+
+
+
+}
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
@@ -28,6 +35,7 @@ public class GameManager : MonoBehaviour
         {3, Constants.Difficulty.HARD}
     };
     private int currentDay = 1;
+    private float currentTimeScale = 1f;
 
     void Awake()
     {
@@ -60,6 +68,17 @@ public class GameManager : MonoBehaviour
                 GameManager.Instance.HandleOverallWin();
             }
         ));
+    }
+
+    public void Pause()
+    {
+        this.currentTimeScale = Time.timeScale;
+        Time.timeScale = 0f;
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = this.currentTimeScale;
     }
 
     private void SetupStressController()
