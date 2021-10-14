@@ -112,6 +112,8 @@ public class Typer : MonoBehaviour
         this.gui.DisposeCurrentWord();
         this.gui.ToggleCelebratoryText(false);
         this.gui.SetupVegtable(this.currentWordSet.vegtable);
+        this.gui.UpdateIcon(this.currentWordSet.vegtable);
+        this.gui.UpdateCounter((int)this.currentWordSet.rounds);
         this.timer.Reset();
         this.Cleanup();
     }
@@ -164,7 +166,9 @@ public class Typer : MonoBehaviour
 
     void HandleRoundChange()
     {
+        int roundDisplay = (int)this.currentWordSet.rounds - this.currentRound;
         this.currentRound++;
+        this.gui.UpdateCounter(roundDisplay);
         this.gui.chefAnimationHandler.ThumbsUp();
         this.gui.knifeAnimationHandler.Toggle(true);
         this.gui.knifeAnimationHandler.Move();

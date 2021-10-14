@@ -26,6 +26,15 @@ public class TyperGUI : MonoBehaviour
     [Header("Knife Animators")]
     public KnifeAnimationHandler knifeAnimationHandler;
 
+    [Header("Counter")]
+    [SerializeField] private Text counterComponent;
+    [SerializeField] private Image vegtableIconComponent;
+    [SerializeField] private Sprite brocolliIcon;
+    [SerializeField] private Sprite carrotIcon;
+    [SerializeField] private Sprite tomatoIcon;
+
+    private Dictionary<VegtableType, Sprite> vegtableIconRouter;
+
     [Header("Tutorial")]
     [SerializeField] private GameObject tutorialUI;
     public GameObject TutorialUI
@@ -48,6 +57,21 @@ public class TyperGUI : MonoBehaviour
             {VegtableType.CARROT, this.carrotAnimationHandler},
             {VegtableType.TOMATO, this.tomatoAnimationHandler}
         };
+        this.vegtableIconRouter = new Dictionary<VegtableType, Sprite>() {
+            {VegtableType.BROCOLLI, this.brocolliIcon},
+            {VegtableType.CARROT, this.carrotIcon},
+            {VegtableType.TOMATO, this.tomatoIcon}
+        };
+    }
+
+    public void UpdateIcon(VegtableType vegtableType)
+    {
+        this.vegtableIconComponent.sprite = this.vegtableIconRouter[vegtableType];
+    }
+
+    public void UpdateCounter(int count)
+    {
+        this.counterComponent.text = count.ToString();
     }
 
     public void SetupVegtable(VegtableType target)
