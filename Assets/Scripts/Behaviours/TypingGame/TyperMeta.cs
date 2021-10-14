@@ -2,10 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum VegtableType
+{
+    BROCOLLI,
+    CARROT,
+    TOMATO
+}
+
 public class TyperWordSet
 {
     public string[] words;
     public float maxTimerCount;
+    public VegtableType vegtable;
     public float rounds
     {
         get
@@ -14,9 +22,10 @@ public class TyperWordSet
         }
     }
 
-    public TyperWordSet(string[] words, float maxTimerCount)
+    public TyperWordSet(string[] words, VegtableType vegtable, float maxTimerCount)
     {
         this.words = words;
+        this.vegtable = vegtable;
         this.maxTimerCount = maxTimerCount;
     }
 }
@@ -47,6 +56,7 @@ public class TyperMeta
                     "calm",
                     "feed"
                 },
+                VegtableType.BROCOLLI,
                 120f
             )
         },
@@ -73,6 +83,7 @@ public class TyperMeta
                     "prove",
                     "clean"
                 },
+                VegtableType.TOMATO,
                 120f
             )
         },
@@ -99,6 +110,7 @@ public class TyperMeta
                     "speed",
                     "carve"
                 },
+                VegtableType.CARROT,
                 120f
             )
         }

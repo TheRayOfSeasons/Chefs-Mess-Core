@@ -13,6 +13,16 @@ public class TyperGUI : MonoBehaviour
     [SerializeField] private Sprite yellow;
     [SerializeField] private Sprite red;
 
+    [Header("Chef Animator")]
+    public ChefAnimationHandler chefAnimationHandler;
+
+    [Header("Vegtable Animators")]
+    [SerializeField] private VegtableAnimationHandler brocolliAnimationHandler;
+    [SerializeField] private VegtableAnimationHandler carrotAnimationHandler;
+    [SerializeField] private VegtableAnimationHandler tomatoAnimationHandler;
+
+    private Dictionary<VegtableType, VegtableAnimationHandler> vegtableSpriteRouter;
+
     [Header("Tutorial")]
     [SerializeField] private GameObject tutorialUI;
     public GameObject TutorialUI
@@ -27,6 +37,28 @@ public class TyperGUI : MonoBehaviour
     [SerializeField] private float letterSpacing = 1f;
     private Dictionary<int, TyperLetter> letterComponents = new Dictionary<int, TyperLetter>();
     private List<GameObject> letterObjects = new List<GameObject>();
+
+    void Awake()
+    {
+        this.vegtableSpriteRouter = new Dictionary<VegtableType, VegtableAnimationHandler>() {
+            {VegtableType.BROCOLLI, this.brocolliAnimationHandler},
+            {VegtableType.CARROT, this.carrotAnimationHandler},
+            {VegtableType.TOMATO, this.tomatoAnimationHandler}
+        };
+    }
+
+    public void SetupVegtable(VegtableType target)
+    {
+        foreach(KeyValuePair<VegtableType, VegtableAnimationHandler> vegtable in this.vegtableSpriteRouter)
+        {
+            vegtable.Value.Toggle(vegtable.Key == target);
+        }
+    }
+
+    public VegtableAnimationHandler GetCurrentVegtableAnimationHandler(VegtableType vegtableType)
+    {
+        return this.vegtableSpriteRouter[vegtableType];
+    }
 
     void Start()
     {
@@ -113,8 +145,5 @@ public class TyperGUI : MonoBehaviour
     public void Traverse(char letter, int index)
     {
         this.letterComponents[index].MarkAsTraversed();
-
-        // add here your custom logic for applying extra effects
-        // or animation after pressing the right key
     }
 }

@@ -37,6 +37,11 @@ public class Typer : MonoBehaviour
         instance = this;
     }
 
+    public void ToggleRoundPause(bool toggle)
+    {
+        this.roundPause = toggle;
+    }
+
     private void SetCountDown()
     {
         this.countdownHandler = new TimedAction(
@@ -106,6 +111,7 @@ public class Typer : MonoBehaviour
         this.gui.UpdateTimerSlider(this.timer.maxTime, this.timer.maxTime);
         this.gui.DisposeCurrentWord();
         this.gui.ToggleCelebratoryText(false);
+        this.gui.SetupVegtable(this.currentWordSet.vegtable);
         this.timer.Reset();
         this.Cleanup();
     }
@@ -146,21 +152,20 @@ public class Typer : MonoBehaviour
         GameManager.Instance.questDefinitions.ClearMainObjective("typing-game", "type-in-all-words");
     }
 
-    void RenderWord()
+    public void RenderWord()
     {
         this.gui.RenderWord(this.GetCurrentWord());
     }
 
     void HandleBeforeWordRerender()
     {
-        this.gui.ToggleCelebratoryText(true);
-        this.roundPauseTimer.Reset();
         this.roundPause = true;
     }
 
     void HandleRoundChange()
     {
         this.currentRound++;
+        this.gui.chefAnimationHandler.ThumbsUp();
         if(this.currentRound > this.currentWordSet.rounds)
         {
             this.HandleWin();
@@ -197,6 +202,8 @@ public class Typer : MonoBehaviour
     void AfterCharacterPress(char character, int characterIndex)
     {
         this.gui.Traverse(character, characterIndex);
+        this.gui.chefAnimationHandler.Chop();
+        this.gui.GetCurrentVegtableAnimationHandler(this.currentWordSet.vegtable).Cut(characterIndex + 1);
     }
 
     void Start()
@@ -231,8 +238,8 @@ public class Typer : MonoBehaviour
 
         if(this.roundPause)
         {
-            if(this.roundPauseTimer != null)
-                this.roundPauseTimer.RunOnce(Time.deltaTime);
+        //     if(this.roundPauseTimer != null)
+        //         this.roundPauseTimer.RunOnce(Time.deltaTime);
             return;
         }
 
