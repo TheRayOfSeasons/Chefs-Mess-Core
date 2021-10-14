@@ -7,6 +7,7 @@ public class TypingGameQuestProvider : QuestProvider
 {
     [SerializeField] private GameObject typingGame;
     [SerializeField] private GameObject gui;
+    [SerializeField] private GameObject cutscene;
 
     public override void Initialize()
     {
@@ -80,6 +81,7 @@ public class TypingGameQuestProvider : QuestProvider
     protected override void RunIntro(Quest quest)
     {
         base.RunIntro(quest);
+        this.cutscene.SetActive(true);
         UIManager.Instance.questModal.SetContents(
             title: quest.name,
             description: quest.description,
