@@ -120,6 +120,6 @@ public class TyperMeta
         {Constants.Difficulty.MEDIUM, 100f},
         {Constants.Difficulty.HARD, 100f},
     };
-    public static Color traversedColor = new Color(0.0f, 0.9f, 0.1f, 1.0f);
-    public static Color untraversedColor = new Color(1.0f, 0.1f, 0.0f, 1.0f);
+    public static Color traversedColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+    public static Color untraversedColor = new Color(0f, 0f, 0f, 1.0f);
 }

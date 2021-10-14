@@ -4043,6 +4043,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1753352406}
     m_Modifications:
+    - target: {fileID: 6070955972945197097, guid: e541461a265ac2e4586cb0bb40d4d900,
+        type: 3}
+      propertyPath: letterSpacing
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070955972945197097, guid: e541461a265ac2e4586cb0bb40d4d900,
+        type: 3}
+      propertyPath: wordCenter.x
+      value: -192.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6070955972945197097, guid: e541461a265ac2e4586cb0bb40d4d900,
+        type: 3}
+      propertyPath: wordCenter.y
+      value: -86.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6070955972945197102, guid: e541461a265ac2e4586cb0bb40d4d900,
         type: 3}
       propertyPath: m_LocalPosition.x
