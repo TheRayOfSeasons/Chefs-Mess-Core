@@ -4078,14 +4078,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1753352406}
     m_Modifications:
-    - target: {fileID: 1294771004, guid: e541461a265ac2e4586cb0bb40d4d900, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1320667976, guid: e541461a265ac2e4586cb0bb40d4d900, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6070955972945197102, guid: e541461a265ac2e4586cb0bb40d4d900,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4195,11 +4187,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TyperGUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 6070955972945197103, guid: e541461a265ac2e4586cb0bb40d4d900,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e541461a265ac2e4586cb0bb40d4d900, type: 3}

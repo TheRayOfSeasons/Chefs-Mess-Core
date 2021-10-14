@@ -6,9 +6,15 @@ using UnityEngine.UI;
 
 public class TyperGUI : MonoBehaviour
 {
+    [SerializeField] private Image timerSlider;
+
+    [Header("Fill Sprites")]
+    [SerializeField] private Sprite green;
+    [SerializeField] private Sprite yellow;
+    [SerializeField] private Sprite red;
+
     [SerializeField] private GameObject letterObjectPrefab;
     [SerializeField] private GameObject celebratoryTextComponent;
-    [SerializeField] private Slider timerSlider;
     [SerializeField] private Vector3 wordCenter = new Vector3();
     [SerializeField] private float letterSpacing = 1f;
     private Dictionary<int, TyperLetter> letterComponents = new Dictionary<int, TyperLetter>();
@@ -20,7 +26,6 @@ public class TyperGUI : MonoBehaviour
             throw new MissingComponentException("letterObjectPrefab must have TyperLetter");
 
         this.celebratoryTextComponent.SetActive(false);
-        this.timerSlider.interactable = false;
     }
 
     private List<Vector3> GetLetterPositions(int count)
@@ -70,15 +75,25 @@ public class TyperGUI : MonoBehaviour
         this.letterObjects.Clear();
     }
 
-    public void SetupTimerSlider(float maxTime)
+    private Sprite GetTimerSprite(float normalizedTime)
     {
-        this.timerSlider.maxValue = maxTime;
-        this.timerSlider.value = maxTime;
+        if(normalizedTime >= 0.67f && normalizedTime <= 1f)
+        {
+            return this.green;
+        }
+        else if(normalizedTime >= 0.34f && normalizedTime < 0.67f)
+        {
+            return this.yellow;
+        }
+        return this.red;
     }
 
-    public void UpdateTimerSlider(float time)
+    public void UpdateTimerSlider(float time, float maxTime)
     {
-        this.timerSlider.value = time;
+        float normalizedTime = time / maxTime;
+        this.timerSlider.fillAmount = normalizedTime;
+        Sprite timerSprite = this.GetTimerSprite(normalizedTime);
+        this.timerSlider.sprite = timerSprite;
     }
 
     public void ToggleCelebratoryText(bool toggle)

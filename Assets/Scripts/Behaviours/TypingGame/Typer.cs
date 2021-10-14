@@ -94,7 +94,7 @@ public class Typer : MonoBehaviour
         this.currentKey = this.GetCurrentCharacterKeyCode();
         this.countdownHandler.Reset();
         this.timer.maxTime = this.currentWord.maxTimerCount;
-        this.gui.SetupTimerSlider(this.currentWord.maxTimerCount);
+        this.gui.UpdateTimerSlider(this.timer.maxTime, this.timer.maxTime);
         this.gui.DisposeCurrentWord();
         this.gui.ToggleCelebratoryText(false);
         this.timer.Reset();
@@ -214,7 +214,7 @@ public class Typer : MonoBehaviour
         if(this.timer != null)
         {
             this.timer.RunOnce(Time.deltaTime);
-            this.gui.UpdateTimerSlider(this.timer.currentTime);
+            this.gui.UpdateTimerSlider(this.timer.currentTime, this.timer.maxTime);
         }
 
         if(this.roundPause)
