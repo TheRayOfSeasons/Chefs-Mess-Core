@@ -12,6 +12,13 @@ public class TilePuzzleGUI : MonoBehaviour
     [SerializeField] private Sprite yellow;
     [SerializeField] private Sprite red;
 
+    [Header("Tutorial")]
+    [SerializeField] private GameObject tutorialUI;
+    public GameObject TutorialUI
+    {
+        get { return this.tutorialUI; }
+    }
+
     private Sprite GetTimerSprite(float normalizedTime)
     {
         if(normalizedTime >= 0.67f && normalizedTime <= 1f)

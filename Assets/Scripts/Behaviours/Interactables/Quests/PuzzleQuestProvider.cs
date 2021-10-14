@@ -7,6 +7,7 @@ public class PuzzleQuestProvider : QuestProvider
 {
     [SerializeField] private GameObject tilePuzzle;
     [SerializeField] private GameObject tileGUI;
+    [SerializeField] private GameObject tutorial;
     [SerializeField] private GameObject cutscene;
 
     public override void Initialize()
@@ -86,8 +87,8 @@ public class PuzzleQuestProvider : QuestProvider
             title: quest.name,
             description: quest.description,
             startEvent: () => {
-                this.ToggleGame(true);
-                TilePuzzle.Instance.Reset();
+                this.tileGUI.SetActive(true);
+                this.tutorial.SetActive(true);
             }
         );
         UIManager.Instance.questModal.Toggle(true);

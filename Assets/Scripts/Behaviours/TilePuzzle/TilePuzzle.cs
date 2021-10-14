@@ -21,6 +21,11 @@ public class TilePuzzle : MonoBehaviour
     [SerializeField] private Vector2 center = new Vector2(0, 0);
     [SerializeField] private TilePuzzleGUI gui;
 
+    public TilePuzzleGUI GUI
+    {
+        get { return this.gui; }
+    }
+
     /**
      * Make sure that the sprites applied to this field follow this order:
      *

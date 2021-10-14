@@ -12,6 +12,10 @@ public class Typer : MonoBehaviour
     }
 
     [SerializeField] private TyperGUI gui;
+    public TyperGUI GUI
+    {
+        get { return this.gui; }
+    }
     protected TyperWordSet currentWordSet;
     protected int currentCharacterIndex = 0;
     protected int currentRound = 1;

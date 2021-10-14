@@ -13,6 +13,14 @@ public class TyperGUI : MonoBehaviour
     [SerializeField] private Sprite yellow;
     [SerializeField] private Sprite red;
 
+    [Header("Tutorial")]
+    [SerializeField] private GameObject tutorialUI;
+    public GameObject TutorialUI
+    {
+        get { return this.tutorialUI; }
+    }
+
+    [Header("Game")]
     [SerializeField] private GameObject letterObjectPrefab;
     [SerializeField] private GameObject celebratoryTextComponent;
     [SerializeField] private Vector3 wordCenter = new Vector3();
