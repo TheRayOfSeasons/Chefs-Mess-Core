@@ -166,6 +166,8 @@ public class Typer : MonoBehaviour
     {
         this.currentRound++;
         this.gui.chefAnimationHandler.ThumbsUp();
+        this.gui.knifeAnimationHandler.Toggle(true);
+        this.gui.knifeAnimationHandler.Move();
         if(this.currentRound > this.currentWordSet.rounds)
         {
             this.HandleWin();

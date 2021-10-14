@@ -23,6 +23,9 @@ public class TyperGUI : MonoBehaviour
 
     private Dictionary<VegtableType, VegtableAnimationHandler> vegtableSpriteRouter;
 
+    [Header("Knife Animators")]
+    public KnifeAnimationHandler knifeAnimationHandler;
+
     [Header("Tutorial")]
     [SerializeField] private GameObject tutorialUI;
     public GameObject TutorialUI
