@@ -58,6 +58,7 @@ public class TyperGUI : MonoBehaviour
             RectTransform letterTransform = letterObject.GetComponent<RectTransform>();
             letterTransform.anchoredPosition3D = positions[i];
             letterObject.name = $"TyperLetter {letter} - {i}";
+            letterTransform.localScale = new Vector3(1, 1, 1);
             TyperLetter letterComponent = letterObject.GetComponent<TyperLetter>();
             letterComponent.DefineLetter(letter);
             this.letterComponents.Add(i, letterComponent);
