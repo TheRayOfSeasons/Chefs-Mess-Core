@@ -146,6 +146,7 @@ public class JumperGame : MonoBehaviour
         this.winTimerHandler.Reset();
         this.runner.Reset();
         this.background.SetupBackground();
+        this.gui.UpdateTimerSlider(this.winTimerHandler.maxTime, this.winTimerHandler.maxTime);
         this.ClearObstacles();
         this.Cleanup();
     }
@@ -173,6 +174,7 @@ public class JumperGame : MonoBehaviour
         if(this.winTimerHandler != null)
         {
             this.winTimerHandler.RunOnce(Time.deltaTime);
+            this.gui.UpdateTimerSlider(this.winTimerHandler.currentTime, this.winTimerHandler.maxTime);
         }
 
         Time.timeScale = this.currentSpeed + 1f;
