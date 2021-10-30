@@ -3348,11 +3348,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1278995597}
     m_Modifications:
-    - target: {fileID: 672314230523222805, guid: df5d2376534160c43adc77f6c26f154e,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -22.399994
-      objectReference: {fileID: 0}
     - target: {fileID: 672314232432416052, guid: df5d2376534160c43adc77f6c26f154e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3593,6 +3588,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: QuestModal
+      objectReference: {fileID: 0}
+    - target: {fileID: 2731982707400063031, guid: 98bdcecc5fadaf94a9af6dece219d18a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2731982707934861180, guid: 98bdcecc5fadaf94a9af6dece219d18a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98bdcecc5fadaf94a9af6dece219d18a, type: 3}
@@ -4748,16 +4753,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1278995597}
     m_Modifications:
-    - target: {fileID: 1026065728510737042, guid: fd490b601e5a32241b066fc5ddaab9eb,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -22.399994
-      objectReference: {fileID: 0}
-    - target: {fileID: 1026065729039965177, guid: fd490b601e5a32241b066fc5ddaab9eb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1026065730627548338, guid: fd490b601e5a32241b066fc5ddaab9eb,
         type: 3}
       propertyPath: m_Name
