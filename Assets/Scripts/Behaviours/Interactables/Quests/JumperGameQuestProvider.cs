@@ -54,9 +54,12 @@ public class JumperGameQuestProvider : QuestProvider
                                 },
                                 exitEvent: () => {
                                     JumperGame.Instance.Cleanup();
+                                    GameManager.Instance.SleepToNextDay();
+                                    this.gui.SetActive(false);
                                     this.jumperGame.SetActive(false);
                                     this.UpdateStress();
-                                }
+                                },
+                                enableRetry: false
                             );
                             UIManager.Instance.taskFailedModal.ToggleToNonHub(true);
                         }
@@ -69,7 +72,7 @@ public class JumperGameQuestProvider : QuestProvider
             }
         );
         /// locked initially
-        // quest.Lock();
+        quest.Lock();
         GameManager.Instance.AddActiveQuest(
             questKey: this.questKey,
             quest: quest
@@ -86,6 +89,7 @@ public class JumperGameQuestProvider : QuestProvider
             startEvent: () => {
                 GameManager.Instance.ToggleHubMode(false);
                 this.gui.SetActive(true);
+                this.jumperGame.SetActive(true);
                 this.tutorial.SetActive(true);
             }
         );

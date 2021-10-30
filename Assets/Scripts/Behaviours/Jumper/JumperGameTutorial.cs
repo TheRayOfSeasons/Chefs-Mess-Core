@@ -13,7 +13,6 @@ public class JumperGameTutorial : Tutorial
     public override void OnExitEvent()
     {
         base.OnExitEvent();
-        this.ToggleGame(true);
         try
         {
             JumperGame.Instance.Reset();
