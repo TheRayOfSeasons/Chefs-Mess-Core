@@ -25,6 +25,15 @@ public class TaskFailedModal : Modal
         this.SetDescription(description);
         this.SetRetryEvent(retryEvent);
         this.SetOnExitEvent(exitEvent);
+        this.tryAgainButtonComponent.interactable = true;
+    }
+
+    public void SetContents(string description, UnityAction retryEvent, UnityAction exitEvent, bool enableRetry)
+    {
+        this.SetDescription(description);
+        this.SetRetryEvent(retryEvent);
+        this.SetOnExitEvent(exitEvent);
+        this.tryAgainButtonComponent.interactable = enableRetry;
     }
 
     public void SetDescription(string description)
