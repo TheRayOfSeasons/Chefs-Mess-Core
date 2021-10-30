@@ -8,7 +8,7 @@ public class Obstacle : MonoBehaviour
 {
     private Vector3 target;
     private Vector3 direction = Vector3.left;
-    private float speed = 3f;
+    private float speed = 5f;
     private float recyclingThreshold = 0.5f;
     private Rigidbody2D rb;
 
