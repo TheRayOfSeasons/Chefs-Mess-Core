@@ -40,6 +40,7 @@ public class JumperGame : MonoBehaviour
         this.countdownHandler = new TimedAction(
             maxTime: this.countDownBeforeStart,
             action: () => {
+                UIManager.Instance.countdownSignal.Toggle(false);
                 this.startCountdown = false;
                 this.StartGame();
             },
@@ -75,6 +76,7 @@ public class JumperGame : MonoBehaviour
 
     public void TriggerGameStart()
     {
+        UIManager.Instance.countdownSignal.Toggle(true);
         this.startCountdown = true;
     }
 
@@ -147,7 +149,7 @@ public class JumperGame : MonoBehaviour
             {
                 this.countdownHandler.RunOnce(Time.deltaTime);
                 float currentTime = Mathf.Ceil(this.countdownHandler.currentTime);
-                Debug.Log(currentTime);
+                UIManager.Instance.countdownSignal.UpdateValue((int)currentTime);
             }
         }
 
