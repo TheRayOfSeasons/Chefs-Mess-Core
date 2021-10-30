@@ -34,7 +34,7 @@ public class PuzzleQuestProvider : QuestProvider
     {
         Quest quest = new Quest(
             name: "Puzzle Recipe",
-            questGroups: new List<QuestGroup>() { QuestGroups.MAIN, QuestGroups.PRIMARY },
+            questGroups: new List<QuestGroup>() { QuestGroups.PRIMARY },
             description: "Arrange a 3x3 tile image puzzle",
             mainObjectives: new Dictionary<string, MainObjective>() {
                 {
@@ -47,6 +47,7 @@ public class PuzzleQuestProvider : QuestProvider
                                 description: "Nice! You solved the puzzle!",
                                 exitEvent: () => {
                                     this.ToggleGame(false);
+                                    TilePuzzle.Instance.ClearTiles();
                                 }
                             );
                             UIManager.Instance.taskCompleteModal.ToggleToNonHub(true);

@@ -36,7 +36,7 @@ public class TypingGameQuestProvider : QuestProvider
             questKey: this.questKey,
             quest: new Quest(
                 name: "Word Slice",
-                questGroups: new List<QuestGroup>() { QuestGroups.MAIN, QuestGroups.PRIMARY },
+                questGroups: new List<QuestGroup>() { QuestGroups.PRIMARY },
                 description: "Type the words that show on the screen.",
                 mainObjectives: new Dictionary<string, MainObjective>() {
                     {

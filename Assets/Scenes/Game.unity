@@ -439,18 +439,6 @@ MonoBehaviour:
   bedModal: {fileID: 5084209830356188629}
   cantSleepModal: {fileID: 2429690223304990680}
   countdownSignal: {fileID: 1730694156}
---- !u!114 &113836388 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 113836388, guid: 2e66bb40a7190b94186ff432a8ead1d0,
-    type: 3}
-  m_PrefabInstance: {fileID: 647890455084576550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &126052153
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,18 +720,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9eeb843904d0835468893f134ca68eb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &349543002 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 349543002, guid: 2e66bb40a7190b94186ff432a8ead1d0,
-    type: 3}
-  m_PrefabInstance: {fileID: 647890455084576550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &394536417
@@ -1902,27 +1878,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 647890455084576550}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1040692366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1040692363}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f0d38c8bcd44c84aa373f35a3f451a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tutorialCards:
-  - {fileID: 21300000, guid: 18e72cb7d20ea884896bb465836900fd, type: 3}
-  - {fileID: 21300000, guid: 7d574aa377c867d45979495bc217ecff, type: 3}
-  - {fileID: 21300000, guid: 0f27ea02b836c864c9c3bf2df535425c, type: 3}
-  imageComponent: {fileID: 349543002}
-  previousButton: {fileID: 1231023853}
-  nextButton: {fileID: 113836388}
-  page: 1
-  tilePuzzle: {fileID: 2044157288}
 --- !u!1 &1220828716 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3031541293242960475, guid: 2e66bb40a7190b94186ff432a8ead1d0,
@@ -1945,18 +1900,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e45bf20b47920048aa77c429e525fc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1231023853 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1231023853, guid: 2e66bb40a7190b94186ff432a8ead1d0,
-    type: 3}
-  m_PrefabInstance: {fileID: 647890455084576550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1235271419
@@ -3734,15 +3677,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1753352406}
     m_Modifications:
+    - target: {fileID: 1040692366, guid: 2e66bb40a7190b94186ff432a8ead1d0, type: 3}
+      propertyPath: tilePuzzle
+      value: 
+      objectReference: {fileID: 2044157288}
     - target: {fileID: 3031541293242960475, guid: 2e66bb40a7190b94186ff432a8ead1d0,
         type: 3}
       propertyPath: m_Name
       value: PuzzleGUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 3031541293242960475, guid: 2e66bb40a7190b94186ff432a8ead1d0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5179782556124336980, guid: 2e66bb40a7190b94186ff432a8ead1d0,
         type: 3}

@@ -111,9 +111,10 @@ public class GameManager : MonoBehaviour
         return this.currentDay;
     }
 
+    // Deprecated
     public bool AllowedToSleep()
     {
-        return QuestGroups.MAIN.isCompleted;
+        return QuestGroups.PRIMARY.isCompleted;
     }
 
     public void SleepToNextDay()
@@ -126,7 +127,6 @@ public class GameManager : MonoBehaviour
     public void ResetQuests()
     {
         QuestGroups.PRIMARY.Reset();
-        QuestGroups.MAIN.Reset();
         this.questDefinitions.GetQuest("jumper").Lock();
     }
 

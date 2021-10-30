@@ -8,6 +8,11 @@ using TimerUtils;
 
 // TODO: If we have extra time, refactor the code of this module to be more DRY.
 
+public class TileInitializationTracker
+{
+    public int day = 0;
+}
+
 public class TilePuzzle : MonoBehaviour
 {
     [SerializeField] private int inactiveIndex = 3;
@@ -52,6 +57,7 @@ public class TilePuzzle : MonoBehaviour
     [SerializeField] private Sprite[] mediumTiles;
     [SerializeField] private Sprite[] hardTiles;
 
+    private TileInitializationTracker initializationTracker = new TileInitializationTracker();
     private string tileNamePrefix = "Tile";
     private string snapperNamePrefix = "SnapDetector";
     private int currentEmptyIndex;
@@ -136,8 +142,23 @@ public class TilePuzzle : MonoBehaviour
         return snappingDetector;
     }
 
-    private void InitializeTiles()
+    // monkey patch to fix issue where tiles can't reset into new sprites
+    private bool CanInitialize()
     {
+        int day = GameManager.Instance.GetCurrentDay();
+        if(day != this.initializationTracker.day)
+        {
+            this.initializationTracker.day = day;
+            return true;
+        }
+        return false;
+    }
+
+    public void InitializeTiles()
+    {
+        if(!this.CanInitialize())
+            return;
+
         float absoluteXCount = Math.Abs(xCount);
         float floatedXCount = (float)absoluteXCount;
         float unpaddedMaxX = (floatedXCount - 1f) * xPadding * 0.5f;
@@ -177,7 +198,7 @@ public class TilePuzzle : MonoBehaviour
                     snapComponent.occupied = false;
                     this.hiddenTiles.Add(tile);
                     tile.SetActive(false);
-                    inactiveTile = tile;
+                    this.inactiveTile = tile;
                 }
                 this.snappingDetectors.Add(snapDetector);
                 this.snappingPoints.Add(position);
@@ -185,6 +206,27 @@ public class TilePuzzle : MonoBehaviour
                 tileId++;
             }
         }
+    }
+
+    public void ClearTiles()
+    {
+        foreach(GameObject tile in this.tiles)
+        {
+            Destroy(tile);
+        }
+        this.tiles.Clear();
+        foreach(GameObject tile in this.hiddenTiles)
+        {
+            Destroy(tile);
+        }
+        this.hiddenTiles.Clear();
+        foreach(GameObject snappingDetector in this.snappingDetectors)
+        {
+            Destroy(snappingDetector);
+        }
+        this.snappingDetectors.Clear();
+        this.snappingPoints.Clear();
+        // Destroy(this.inactiveTile);
     }
 
     private void ShuffleTiles()
@@ -398,8 +440,8 @@ public class TilePuzzle : MonoBehaviour
         if(this.timer != null)
         {
             this.timer.Reset();
+            this.gui.UpdateTimerSlider(this.timer.maxTime, this.timer.maxTime);
         }
-        this.gui.UpdateTimerSlider(this.timer.maxTime, this.timer.maxTime);
         this.isDone = false;
         this.isStarted = false;
     }
@@ -414,8 +456,6 @@ public class TilePuzzle : MonoBehaviour
     {
         this.currentEmptyIndex = this.inactiveIndex;
         this.SetTimer();
-        this.InitializeTiles();
-        this.Reset();
         this.mainCamera = Camera.main;
     }
 

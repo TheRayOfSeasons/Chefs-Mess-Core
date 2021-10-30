@@ -27,7 +27,6 @@ public class JumperGameQuestProvider : QuestProvider
     {
         Quest quest = new Quest(
             name: "Sheep Mayhem",
-            questGroups: new List<QuestGroup>() { QuestGroups.MAIN },
             description: "Avoid the obstacles and reach the end!",
             mainObjectives: new Dictionary<string, MainObjective>() {
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Deprecated
 public class Bed : Interactable
 {
     public override void OnInteract()

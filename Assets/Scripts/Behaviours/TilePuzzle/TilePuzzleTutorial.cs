@@ -16,7 +16,8 @@ public class TilePuzzleTutorial : Tutorial
     public override void OnExitEvent()
     {
         base.OnExitEvent();
-        this.tilePuzzle.SetActive(true);
+        this.ToggleGame(true);
+        TilePuzzle.Instance.InitializeTiles();
         TilePuzzle.Instance.Reset();
     }
 }
