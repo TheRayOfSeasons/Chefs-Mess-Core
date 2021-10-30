@@ -11,6 +11,8 @@ public class JumperGame : MonoBehaviour
         get { return instance; }
     }
 
+    public JumperGUI gui;
+
     [SerializeField] public float speedIncrementInterval = 10f;
     [SerializeField] public float countDownBeforeStart = 3f;
     [SerializeField] public float secondsToWin = 60f;

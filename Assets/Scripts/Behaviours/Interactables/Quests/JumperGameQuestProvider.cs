@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using QuestManagement;
 
 public class JumperGameQuestProvider : QuestProvider
 {
+    [SerializeField] private GameObject gui;
     [SerializeField] private GameObject jumperGame;
+    [SerializeField] private GameObject tutorial;
+    [SerializeField] private GameObject cutscene;
 
     public override void Initialize()
     {
@@ -38,6 +39,7 @@ public class JumperGameQuestProvider : QuestProvider
                             UIManager.Instance.taskCompleteModal.SetContents(
                                 description: "Hooray! You got to the finish line!",
                                 exitEvent: () => {
+                                    JumperGame.Instance.Cleanup();
                                     this.jumperGame.SetActive(false);
                                 }
                             );
@@ -67,7 +69,7 @@ public class JumperGameQuestProvider : QuestProvider
             }
         );
         /// locked initially
-        quest.Lock();
+        // quest.Lock();
         GameManager.Instance.AddActiveQuest(
             questKey: this.questKey,
             quest: quest
@@ -77,25 +79,14 @@ public class JumperGameQuestProvider : QuestProvider
     protected override void RunIntro(Quest quest)
     {
         base.RunIntro(quest);
+        this.cutscene.SetActive(true);
         UIManager.Instance.questModal.SetContents(
             title: quest.name,
             description: quest.description,
             startEvent: () => {
                 GameManager.Instance.ToggleHubMode(false);
-                this.jumperGame.SetActive(true);
-                try
-                {
-                    JumperGame.Instance.Reset();
-                }
-                catch(NullReferenceException)
-                {
-                    /*
-                        Do nothing. In this case, the JumperGame
-                        wasn't initialized yet. The start function
-                        will handle it.
-                    */
-                }
-                JumperGame.Instance.TriggerGameStart();
+                this.gui.SetActive(true);
+                this.tutorial.SetActive(true);
             }
         );
         UIManager.Instance.questModal.Toggle(true);

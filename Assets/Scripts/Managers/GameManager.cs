@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
     {
         QuestGroups.PRIMARY.Reset();
         QuestGroups.MAIN.Reset();
-        this.questDefinitions.GetQuest("puzzle").Lock();
+        this.questDefinitions.GetQuest("jumper").Lock();
     }
 
     public int PushToNextDay()
