@@ -16,6 +16,7 @@ public class JumperGame : MonoBehaviour
     [SerializeField] public float speedIncrementInterval = 10f;
     [SerializeField] public float countDownBeforeStart = 3f;
     [SerializeField] public float secondsToWin = 60f;
+    [SerializeField] public Runner runner;
 
     private bool isOngoing = true;
     public bool IsOngoing { get { return this.isOngoing; } }
@@ -139,6 +140,7 @@ public class JumperGame : MonoBehaviour
         this.speedIncrementHandler.Reset();
         this.countdownHandler.Reset();
         this.winTimerHandler.Reset();
+        this.runner.Reset();
         this.ClearObstacles();
         this.Cleanup();
     }

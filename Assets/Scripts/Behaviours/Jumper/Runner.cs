@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(MonoTagAssigner))]
 public class Runner : MonoBehaviour
@@ -13,10 +14,17 @@ public class Runner : MonoBehaviour
     private Rigidbody2D rb;
     private bool isJumpPressed = false;
     private bool canJump = false;
+    private Animator animator;
 
     void Awake()
     {
+        this.animator = this.GetComponent<Animator>();
         this.GetComponent<MonoTagAssigner>().monoTag = Constants.MonoTag.JUMPER_GAME_RUNNER;
+    }
+
+    public void Reset()
+    {
+        this.animator.Play("Running");
     }
 
     void Start()
@@ -33,7 +41,8 @@ public class Runner : MonoBehaviour
     void Jump()
     {
         this.rb.AddForce(Vector2.up * this.jumpSpeed);
-        this.isJumpPressed = false;
+        this.canJump = false;
+        this.animator.Play("Jumping");
     }
 
     void FixedUpdate()
@@ -41,6 +50,7 @@ public class Runner : MonoBehaviour
         if(!JumperGame.Instance.IsOngoing)
             return;
 
+        this.animator.SetBool("isJumping", !this.canJump);
         RaycastHit2D[] hits = Physics2D.RaycastAll(
             this.raycasterPosition,
             this.raycasterDirection,
@@ -55,7 +65,6 @@ public class Runner : MonoBehaviour
             }
             this.canJump = false;
         }
-        Debug.Log(this.canJump);
 
         this.isJumpPressed = Input.GetKey(KeyMaps.JUMPER_HOP);
         if(this.isJumpPressed && this.canJump)
@@ -74,6 +83,7 @@ public class Runner : MonoBehaviour
             MonoTagAssigner tag = collider.GetComponent<MonoTagAssigner>();
             if(tag.monoTag == Constants.MonoTag.JUMPER_GAME_OBSTACLE)
             {
+                this.animator.Play("Hurt");
                 JumperGame.Instance.HandleLose();
             }
         }

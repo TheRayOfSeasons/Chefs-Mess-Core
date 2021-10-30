@@ -59,6 +59,7 @@ public class TypingGameQuestProvider : QuestProvider
                                     retryEvent: () => {
                                         Typer.Instance.Reset();
                                         Typer.Instance.TriggerGameStart();
+                                        this.UpdateStress();
                                     },
                                     exitEvent: () => {
                                         Typer.Instance.Reset();
