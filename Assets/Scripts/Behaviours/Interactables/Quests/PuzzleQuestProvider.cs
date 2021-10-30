@@ -57,6 +57,7 @@ public class PuzzleQuestProvider : QuestProvider
                                 description: "You ran out of time :(",
                                 retryEvent: () => {
                                     TilePuzzle.Instance.Reset();
+                                    TilePuzzle.Instance.TriggerGameStart();
                                     this.UpdateStress();
                                 },
                                 exitEvent: () => {

@@ -25,6 +25,7 @@ public class TilePuzzle : MonoBehaviour
     [SerializeField] private bool isStarted = false;
     [SerializeField] private Vector2 center = new Vector2(0, 0);
     [SerializeField] private TilePuzzleGUI gui;
+    [SerializeField] public float countDownBeforeStart = 3f;
 
     public TilePuzzleGUI GUI
     {
@@ -61,6 +62,7 @@ public class TilePuzzle : MonoBehaviour
     private string tileNamePrefix = "Tile";
     private string snapperNamePrefix = "SnapDetector";
     private int currentEmptyIndex;
+    private bool startCountdown = false;
     private List<Vector2> snappingPoints = new List<Vector2>();
     private List<GameObject> snappingDetectors = new List<GameObject>();
     private List<GameObject> tiles = new List<GameObject>();
@@ -71,6 +73,7 @@ public class TilePuzzle : MonoBehaviour
     private GameObject selectedTile;
     private Dictionary<int, Vector2> currentConnections = new Dictionary<int, Vector2>();
     private TimedAction timer;
+    private TimedAction countdownHandler;
     private GameObject inactiveTile;
 
     private static TilePuzzle instance;
@@ -88,6 +91,25 @@ public class TilePuzzle : MonoBehaviour
     {
         Constants.Difficulty difficulty = GameManager.Instance.GetCurrentDifficulty();
         return TilePuzzleMeta.timerSettings[difficulty];
+    }
+
+    private void SetCountDown()
+    {
+        this.countdownHandler = new TimedAction(
+            maxTime: this.countDownBeforeStart,
+            action: () => {
+                UIManager.Instance.countdownSignal.Toggle(false);
+                this.startCountdown = false;
+                this.StartGame();
+            },
+            triggerOnInitial: false
+        );
+    }
+
+    public void TriggerGameStart()
+    {
+        this.startCountdown = true;
+        UIManager.Instance.countdownSignal.Toggle(true);
     }
 
     private void SetTimer()
@@ -442,13 +464,16 @@ public class TilePuzzle : MonoBehaviour
             this.timer.Reset();
             this.gui.UpdateTimerSlider(this.timer.maxTime, this.timer.maxTime);
         }
+        if(this.countdownHandler != null)
+        {
+            this.countdownHandler.Reset();
+        }
         this.isDone = false;
         this.isStarted = false;
     }
 
     public void StartGame()
     {
-        // TODO: add tutorials
         this.isStarted = true;
     }
 
@@ -456,13 +481,24 @@ public class TilePuzzle : MonoBehaviour
     {
         this.currentEmptyIndex = this.inactiveIndex;
         this.SetTimer();
+        this.SetCountDown();
         this.mainCamera = Camera.main;
     }
 
     void Update()
     {
-        // if(!this.isStarted)
-        //     return;
+        if(this.startCountdown)
+        {
+            if(this.countdownHandler != null)
+            {
+                this.countdownHandler.RunOnce(Time.deltaTime);
+                float currentTime = Mathf.Ceil(this.countdownHandler.currentTime);
+                UIManager.Instance.countdownSignal.UpdateValue((int)currentTime);
+            }
+        }
+
+        if(!this.isStarted)
+            return;
 
         if(this.isDone)
             return;

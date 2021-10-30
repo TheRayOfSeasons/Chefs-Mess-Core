@@ -19,5 +19,6 @@ public class TilePuzzleTutorial : Tutorial
         this.ToggleGame(true);
         TilePuzzle.Instance.InitializeTiles();
         TilePuzzle.Instance.Reset();
+        TilePuzzle.Instance.TriggerGameStart();
     }
 }
