@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using QuestManagement;
 using StressManagement;
 
@@ -92,12 +93,12 @@ public class GameManager : MonoBehaviour
 
     public void HandleOverallWin()
     {
-        Debug.Log("Game has been won!");
+        UIManager.Instance.gameWinModal.Toggle(true);
     }
 
     public void HandleOverallLose()
     {
-        Debug.Log("Game has been lost");
+        UIManager.Instance.gameOverModal.Toggle(true);
     }
 
     public void SetDifficulty(Constants.Difficulty difficulty)
@@ -191,4 +192,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }
