@@ -6,13 +6,6 @@ using StressManagement;
 
 public delegate void InteractabilityReceptor(GameObject interactableObject);
 
-public class PauseManager
-{
-
-
-
-}
-
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
