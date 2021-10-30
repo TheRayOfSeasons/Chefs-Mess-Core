@@ -74,7 +74,7 @@ public class JumperGameQuestProvider : QuestProvider
             }
         );
         /// locked initially
-        // quest.Lock();
+        quest.Lock();
         GameManager.Instance.AddActiveQuest(
             questKey: this.questKey,
             quest: quest
