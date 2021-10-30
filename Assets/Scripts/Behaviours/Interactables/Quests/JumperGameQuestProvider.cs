@@ -26,9 +26,9 @@ public class JumperGameQuestProvider : QuestProvider
     private void SetupQuest()
     {
         Quest quest = new Quest(
-            name: "Jumper Game",
+            name: "Sheep Mayhem",
             questGroups: new List<QuestGroup>() { QuestGroups.MAIN },
-            description: "Run run run!",
+            description: "Avoid the obstacles and reach the end!",
             mainObjectives: new Dictionary<string, MainObjective>() {
                 {
                     "arrive-at-finish-line",
@@ -40,6 +40,8 @@ public class JumperGameQuestProvider : QuestProvider
                                 description: "Hooray! You got to the finish line!",
                                 exitEvent: () => {
                                     JumperGame.Instance.Cleanup();
+                                    GameManager.Instance.SleepToNextDay();
+                                    this.gui.SetActive(false);
                                     this.jumperGame.SetActive(false);
                                 }
                             );
@@ -72,7 +74,7 @@ public class JumperGameQuestProvider : QuestProvider
             }
         );
         /// locked initially
-        quest.Lock();
+        // quest.Lock();
         GameManager.Instance.AddActiveQuest(
             questKey: this.questKey,
             quest: quest

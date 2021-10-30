@@ -35,9 +35,9 @@ public class TypingGameQuestProvider : QuestProvider
         GameManager.Instance.AddActiveQuest(
             questKey: this.questKey,
             quest: new Quest(
-                name: "Typing Game",
+                name: "Word Slice",
                 questGroups: new List<QuestGroup>() { QuestGroups.MAIN, QuestGroups.PRIMARY },
-                description: "Type each word to cut the vegetables.",
+                description: "Type the words that show on the screen.",
                 mainObjectives: new Dictionary<string, MainObjective>() {
                     {
                         "type-in-all-words",
