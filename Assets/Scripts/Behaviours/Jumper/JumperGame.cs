@@ -12,6 +12,7 @@ public class JumperGame : MonoBehaviour
     }
 
     public JumperGUI gui;
+    public SeamlessBackground background;
 
     [SerializeField] public float speedIncrementInterval = 10f;
     [SerializeField] public float countDownBeforeStart = 3f;
@@ -80,6 +81,7 @@ public class JumperGame : MonoBehaviour
     public void TriggerGameStart()
     {
         UIManager.Instance.countdownSignal.Toggle(true);
+        this.background.ToggleAnimate(true);
         this.startCountdown = true;
     }
 
@@ -108,6 +110,7 @@ public class JumperGame : MonoBehaviour
 
     public void HandleLose()
     {
+        this.background.ToggleAnimate(false);
         this.isOngoing = false;
         Time.timeScale = 0f;
         GameManager.Instance.questDefinitions.FailMainObjective("jumper", "arrive-at-finish-line");
@@ -115,6 +118,7 @@ public class JumperGame : MonoBehaviour
 
     public void HandleWin()
     {
+        this.background.ToggleAnimate(false);
         this.isOngoing = false;
         Time.timeScale = 0f;
         GameManager.Instance.questDefinitions.ClearMainObjective("jumper", "arrive-at-finish-line");
@@ -141,6 +145,7 @@ public class JumperGame : MonoBehaviour
         this.countdownHandler.Reset();
         this.winTimerHandler.Reset();
         this.runner.Reset();
+        this.background.SetupBackground();
         this.ClearObstacles();
         this.Cleanup();
     }
