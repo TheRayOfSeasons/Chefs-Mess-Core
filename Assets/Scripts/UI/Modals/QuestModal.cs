@@ -33,6 +33,7 @@ public class QuestModal : Modal
         this.startButtonComponent.onClick.RemoveAllListeners();
         this.startButtonComponent.onClick.AddListener(() => {
             this.ToggleToNonHub(false);
+            AudioManager.Instance.PlayTaskAudio(TaskAudio.ACCEPTED);
             startEvent();
         });
     }

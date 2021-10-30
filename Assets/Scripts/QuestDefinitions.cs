@@ -49,6 +49,7 @@ public class QuestDefinitions
         Quest quest = this.activeQuests[questKey];
         if(!ValidateMainObjectiveCall(quest, objectiveKey))
             return;
+        AudioManager.Instance.PlayTaskAudio(TaskAudio.SUCCESS);
         this.activeQuests[questKey].mainObjectives[objectiveKey].OverrideCompletion();
         this.CheckCompletions();
     }
@@ -60,6 +61,7 @@ public class QuestDefinitions
         Quest quest = this.activeQuests[questKey];
         if(!ValidateOptionalObjectiveCall(quest, objectiveKey))
             return;
+        AudioManager.Instance.PlayTaskAudio(TaskAudio.SUCCESS);
         quest.optionalObjectives[objectiveKey].OverrideCompletion();
         this.CheckCompletions();
     }
@@ -71,6 +73,7 @@ public class QuestDefinitions
         Quest quest = this.activeQuests[questKey];
         if(!ValidateMainObjectiveCall(quest, objectiveKey))
             return;
+        AudioManager.Instance.PlayTaskAudio(TaskAudio.FAILED);
         this.activeQuests[questKey].mainObjectives[objectiveKey].onFail();
     }
 
@@ -81,6 +84,7 @@ public class QuestDefinitions
         Quest quest = this.activeQuests[questKey];
         if(!ValidateOptionalObjectiveCall(quest, objectiveKey))
             return;
+        AudioManager.Instance.PlayTaskAudio(TaskAudio.FAILED);
         quest.optionalObjectives[objectiveKey].onFail();
     }
 

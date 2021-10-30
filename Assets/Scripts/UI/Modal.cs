@@ -30,6 +30,7 @@ namespace UIComponents
         public virtual void OnModalExit()
         {
             GameManager.Instance.ToggleHubMode(true);
+            AudioManager.Instance.ChangeBackgroundMusic(BGM.HUB);
         }
 
         public virtual void OnNonHubModalDisplay() {}

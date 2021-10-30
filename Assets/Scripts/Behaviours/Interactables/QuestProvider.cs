@@ -4,6 +4,7 @@ using QuestManagement;
 public class QuestProvider : Interactable
 {
     public string questKey;
+    public BGM questBGM;
 
     protected virtual void RunCompletedAlready(Quest quest)
     {
@@ -44,6 +45,7 @@ public class QuestProvider : Interactable
         {
             throw new ArgumentException("questKey must be defined.");
         }
+        AudioManager.Instance.ChangeBackgroundMusic(this.questBGM);
         Quest quest = GameManager.Instance.questDefinitions.GetQuest(questKey: this.questKey);
         this.RunQuestIntro(quest);
     }
