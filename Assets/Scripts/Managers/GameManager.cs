@@ -127,6 +127,7 @@ public class GameManager : MonoBehaviour
     public void ResetQuests()
     {
         QuestGroups.PRIMARY.Reset();
+        this.questDefinitions.GetQuest("jumper").Reset();
         this.questDefinitions.GetQuest("jumper").Lock();
     }
 
