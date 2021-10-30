@@ -21,7 +21,7 @@ public class Tile : MonoBehaviour
             this.transform.position = Vector2.Lerp(
                 this.transform.position,
                 this.autoTarget,
-                0.05f
+                0.1f
             );
         }
     }
