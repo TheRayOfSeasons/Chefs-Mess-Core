@@ -94,6 +94,7 @@ public class Typer : MonoBehaviour
     public void Cleanup()
     {
         this.isOngoing = false;
+        this.gui.DisposeCurrentWord();
     }
 
     public void Reset()
