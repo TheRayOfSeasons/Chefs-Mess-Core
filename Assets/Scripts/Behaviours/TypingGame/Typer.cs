@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TimerUtils;
@@ -88,7 +89,14 @@ public class Typer : MonoBehaviour
 
     protected string GetCurrentWord()
     {
-        return this.GetCurrentWordSet().words[this.currentRound - 1];
+        try
+        {
+            return this.GetCurrentWordSet().words[this.currentRound - 1];
+        }
+        catch(IndexOutOfRangeException)
+        {
+            return "";
+        }
     }
 
     public void Cleanup()
@@ -159,7 +167,8 @@ public class Typer : MonoBehaviour
 
     public void RenderWord()
     {
-        this.gui.RenderWord(this.GetCurrentWord());
+        string word = this.GetCurrentWord();
+        this.gui.RenderWord(word);
     }
 
     void HandleBeforeWordRerender()
