@@ -4726,6 +4726,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TaskCompleteModal
       objectReference: {fileID: 0}
+    - target: {fileID: 7259389451290241136, guid: 987d797963699d74b972a8df6828e384,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 987d797963699d74b972a8df6828e384, type: 3}
 --- !u!114 &1842223099237328802 stripped
