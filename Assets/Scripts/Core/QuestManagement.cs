@@ -154,7 +154,6 @@ namespace QuestManagement
         public override void Reset()
         {
             base.Reset();
-            Debug.Log($"Resetting quest group {this.name}");
             foreach(Quest quest in this.quests)
                 quest.Reset();
         }
