@@ -80,6 +80,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayVictoryMusic()
     {
+        this.bgmMap[this.currentBGM].Stop();
         this.victory.Play();
     }
 }
