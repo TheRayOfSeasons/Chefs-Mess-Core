@@ -68,6 +68,8 @@ public class AudioManager : MonoBehaviour
 
     public void ChangeBackgroundMusic(BGM bgm)
     {
+        if(this.bgmMap == null)
+            return;
         this.bgmMap[this.currentBGM].Stop();
         this.bgmMap[bgm].Play();
         this.currentBGM = bgm;
