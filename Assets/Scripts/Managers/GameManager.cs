@@ -41,27 +41,6 @@ public class GameManager : MonoBehaviour
     private void SetupQuests()
     {
         this.questDefinitions = new QuestDefinitions();
-        this.AddActiveQuest("overall", new Quest(
-            name: "Finish the game.",
-            description: "Finish all quests",
-            mainObjectives: new Dictionary<string, MainObjective>() {
-                {
-                    "finish-all-quests",
-                    new MainObjective(
-                        name: "Finish all quests.",
-                        description: "",
-                        onComplete: () => {},
-                        onFail: () => {
-                            GameManager.Instance.HandleOverallLose();
-                        }
-                    )
-                }
-            },
-            optionalObjectives: new Dictionary<string, OptionalObjective>(),
-            onComplete: () => {
-                GameManager.Instance.HandleOverallWin();
-            }
-        ));
     }
 
     public void Pause()
@@ -85,7 +64,7 @@ public class GameManager : MonoBehaviour
                 UIManager.Instance.hubGUI.UpdateStress(currentStress, maxStress);
             },
             onStressMax: () => {
-                this.questDefinitions.FailMainObjective("overall", "finish-all-quests");
+                GameManager.Instance.HandleOverallLose();
             }
         );
         UIManager.Instance.hubGUI.UpdateStress(this.stress.currentStress, this.stress.Meta.maxStress);

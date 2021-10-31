@@ -4,8 +4,11 @@ using QuestManagement;
 public class QuestGroups
 {
     public static QuestGroup PRIMARY = new QuestGroup("primary", () => {
-        if(GameManager.Instance.GetCurrentDay() >= 3)
-            GameManager.Instance.questDefinitions.ClearMainObjective("overall", "finish-all-quests");
+        if(GameManager.Instance.GetCurrentDay() >= 3) {
+            // GameManager.Instance.questDefinitions.ClearMainObjective("overall", "finish-all-quests");
+            GameManager.Instance.HandleOverallWin();
+            return;
+        }
         Quest quest;
         try
         {
