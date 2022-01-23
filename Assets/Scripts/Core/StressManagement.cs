@@ -15,7 +15,7 @@ namespace StressManagement
 
     public class StressMeta
     {
-        public float maxStress = 1000;
+        public float maxStress = 600;
         public Dictionary<float, StressLevel> stressIndicationMap = new Dictionary<float, StressLevel>() {
             {0.25f, StressLevel.LOW},
             {0.75f, StressLevel.MID},
