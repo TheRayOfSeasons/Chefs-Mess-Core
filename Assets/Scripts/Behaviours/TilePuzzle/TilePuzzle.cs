@@ -110,6 +110,9 @@ public class TilePuzzle : MonoBehaviour
     {
         this.startCountdown = true;
         UIManager.Instance.countdownSignal.Toggle(true);
+        GameManager.Instance.SetGiveUpEvent(() => {
+            this.HandleLose();
+        });
     }
 
     private void SetTimer()
@@ -425,15 +428,20 @@ public class TilePuzzle : MonoBehaviour
         }
     }
 
-    private void HandleLose()
+    private void Cleanup()
     {
         this.isDone = true;
+        GameManager.Instance.UnsetGiveUpEvent();
+    }
+    private void HandleLose()
+    {
+        this.Cleanup();
         GameManager.Instance.questDefinitions.FailMainObjective("puzzle", "solve-the-puzzle");
     }
 
     private void HandleWin()
     {
-        this.isDone = true;
+        this.Cleanup();
         foreach(GameObject tile in this.hiddenTiles)
         {
             tile.SetActive(true);

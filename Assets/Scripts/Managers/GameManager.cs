@@ -6,6 +6,8 @@ using QuestManagement;
 using StressManagement;
 
 public delegate void InteractabilityReceptor(GameObject interactableObject);
+public delegate void GiveUpEvent();
+public delegate void MiniGameHook(bool isInMiniGame);
 
 public class GameManager : MonoBehaviour
 {
@@ -31,11 +33,52 @@ public class GameManager : MonoBehaviour
     private int currentDay = 1;
     private float currentTimeScale = 1f;
 
+    private bool isInMiniGame = false;
+    public bool IsInMiniGame { get { return this.isInMiniGame; } }
+    private GiveUpEvent giveUpEvent;
+    private List<MiniGameHook> miniGameHooks = new List<MiniGameHook>(); 
+
     void Awake()
     {
         instance = this;
         this.SetupQuests();
         this.SetupStressController();
+    }
+
+    private void RunMiniGameHooks()
+    {
+        foreach(MiniGameHook hook in this.miniGameHooks)
+            hook(this.isInMiniGame);
+    }
+
+    public void AddMiniGameHook(MiniGameHook hook)
+    {
+        this.miniGameHooks.Add(hook);
+    }
+
+    public void SetGiveUpEvent(GiveUpEvent giveUpEvent)
+    {
+        this.isInMiniGame = true;
+        this.giveUpEvent = giveUpEvent;
+        this.RunMiniGameHooks();
+    }
+
+    public void UnsetGiveUpEvent()
+    {
+        this.isInMiniGame = false;
+        this.giveUpEvent = null;
+        this.RunMiniGameHooks();
+    }
+
+    public void GiveUpQuest()
+    {
+        if(!this.isInMiniGame)
+            return;
+
+        if(this.giveUpEvent == null)
+            return;
+
+        this.giveUpEvent();
     }
 
     private void SetupQuests()

@@ -103,6 +103,7 @@ public class Typer : MonoBehaviour
     {
         this.isOngoing = false;
         this.gui.DisposeCurrentWord();
+        GameManager.Instance.UnsetGiveUpEvent();
     }
 
     public void Reset()
@@ -132,6 +133,9 @@ public class Typer : MonoBehaviour
     {
         this.startCountdown = true;
         UIManager.Instance.countdownSignal.Toggle(true);
+        GameManager.Instance.SetGiveUpEvent(() => {
+            this.HandleLose();
+        });
     }
 
     public void StartGame()

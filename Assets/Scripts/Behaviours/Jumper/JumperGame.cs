@@ -83,6 +83,9 @@ public class JumperGame : MonoBehaviour
         UIManager.Instance.countdownSignal.Toggle(true);
         this.background.ToggleAnimate(true);
         this.startCountdown = true;
+        GameManager.Instance.SetGiveUpEvent(() => {
+            this.HandleLose();
+        });
     }
 
     public void StartGame()
@@ -108,19 +111,23 @@ public class JumperGame : MonoBehaviour
         }
     }
 
-    public void HandleLose()
+    private void HandleEndGame()
     {
         this.background.ToggleAnimate(false);
         this.isOngoing = false;
         Time.timeScale = 0f;
+        GameManager.Instance.UnsetGiveUpEvent();
+    }
+
+    public void HandleLose()
+    {
+        this.HandleEndGame();
         GameManager.Instance.questDefinitions.FailMainObjective("jumper", "arrive-at-finish-line");
     }
 
     public void HandleWin()
     {
-        this.background.ToggleAnimate(false);
-        this.isOngoing = false;
-        Time.timeScale = 0f;
+        this.HandleEndGame();
         GameManager.Instance.questDefinitions.ClearMainObjective("jumper", "arrive-at-finish-line");
     }
 
