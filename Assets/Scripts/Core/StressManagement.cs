@@ -69,7 +69,7 @@ namespace StressManagement
 
         private void Check()
         {
-            if(this.currentStress >= this.Meta.maxStress)
+            if(this.currentStress > this.Meta.maxStress)
                 this.onStressMax();
         }
 
